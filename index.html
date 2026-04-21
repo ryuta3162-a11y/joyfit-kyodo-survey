@@ -84,7 +84,7 @@
                     <div id="services-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                <div id="dependency-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
                     <h2 class="text-xl md:text-2xl font-black text-joyred">2. 各カテゴリーの利用度</h2>
                     <p class="mt-2 text-sm text-gray-600">★1 = 使わない / ★5 = とてもよく使う</p>
                     <div id="dependency-grid" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -184,6 +184,7 @@
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
         const servicesGrid = document.getElementById('services-grid');
+        const dependencySection = document.getElementById('dependency-section');
         const dependencyGrid = document.getElementById('dependency-grid');
         const top5Section = document.getElementById('top5-section');
         const lessonSection = document.getElementById('lesson-section');
@@ -292,6 +293,7 @@
             services.forEach((service) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'block bg-white border border-joygray rounded-xl px-3 py-3';
+                wrapper.dataset.service = service;
                 const stars = [1, 2, 3, 4, 5]
                     .map((n) => `<button type="button" data-service="${service}" data-star="${n}" class="star-btn text-2xl leading-none px-0.5 ${n <= dependencyState[service] ? 'active' : ''}">★</button>`)
                     .join('');
@@ -373,12 +375,18 @@
             const showLesson = selectedServices.some((item) => studioServices.includes(item));
             const showStudio = selectedServices.includes('スタジオ');
             const showPilates = selectedServices.includes('ピラティス');
+            const showDependency = selectedServices.length > 0;
             const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
             const filteredByDay = selectedDays.length
                 ? lessonSchedule.filter((x) => selectedDays.includes(x.day))
                 : lessonSchedule;
             const studioLessons = filteredByDay.filter((x) => x.area === 'ホットスタジオ');
             const pilatesLessons = filteredByDay.filter((x) => x.area === 'ピラティスルーム');
+            dependencySection.classList.toggle('hidden', !showDependency);
+            dependencyGrid.querySelectorAll('[data-service]').forEach((card) => {
+                const shouldShow = selectedServices.includes(card.dataset.service);
+                card.classList.toggle('hidden', !shouldShow);
+            });
             top5Section.classList.toggle('hidden', !showTop5);
             lessonSection.classList.toggle('hidden', !showLesson);
             studioSubsection.classList.toggle('hidden', !showStudio);
