@@ -47,19 +47,10 @@
             </div>
         </section>
 
-        <section class="max-w-6xl mx-auto px-4 pt-8 md:pt-12">
-            <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
-                <h2 class="text-xl md:text-2xl font-black text-joyred">マシンラインナップ（参考）</h2>
-                <p class="mt-2 text-sm text-gray-600">実際によく使うマシンを思い出しながら、下のアンケートにご回答ください。</p>
-                <div id="machine-area-menu" class="mt-4 flex flex-wrap gap-2"></div>
-                <div id="machine-grid" class="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"></div>
-            </div>
-        </section>
-
         <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
             <form id="survey-form" class="space-y-6">
                 <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">1. よく利用しているサービスを教えてください（複数選択可）</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">1. よく利用しているサービスを複数選択してください</h2>
                     <div id="services-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
 
@@ -69,20 +60,20 @@
                 </div>
 
                 <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">3. 次に最も使用しているマシンをベスト5で教えてください</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">3. あなたのお気に入りマシンをベスト5で教えてください</h2>
                     <p class="mt-2 text-sm text-gray-600">画像をタップして選択（最大5件）。もう一度タップすると解除されます。</p>
                     <div id="top5-selected" class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-2"></div>
-                    <div id="top5-candidate-grid" class="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2"></div>
+                    <div id="top5-candidate-grid" class="mt-4 grid grid-cols-4 gap-3"></div>
                 </div>
 
                 <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加してほしい内容</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加して欲しい内容</h2>
                     <label class="block mt-4">
-                        <span class="text-sm font-bold">欲しいマシン</span>
+                        <span class="text-sm font-bold">追加して欲しいマシン</span>
                         <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: ハックスクワット、グルートドライブ など"></textarea>
                     </label>
                     <label class="block mt-4">
-                        <span class="text-sm font-bold">欲しいオプション・設備</span>
+                        <span class="text-sm font-bold">追加して欲しい設備</span>
                         <textarea name="wantedOptions" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: サプリメントサーバー、コワーキングスペース など"></textarea>
                     </label>
                 </div>
@@ -141,8 +132,6 @@
         // Google Apps Script WebアプリURLに差し替えてください
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
-        const machineAreaMenu = document.getElementById('machine-area-menu');
-        const machineGrid = document.getElementById('machine-grid');
         const servicesGrid = document.getElementById('services-grid');
         const dependencyGrid = document.getElementById('dependency-grid');
         const top5Selected = document.getElementById('top5-selected');
@@ -246,43 +235,6 @@
             });
         }
 
-        function renderMachineCards(areaId) {
-            const area = gymData.find((x) => x.id === areaId) || gymData[0];
-            machineGrid.innerHTML = '';
-            area.items.forEach((item) => {
-                const card = document.createElement('article');
-                card.className = 'machine-card bg-white border border-joygray rounded-xl overflow-hidden';
-                card.innerHTML = `
-                    <div class="aspect-[4/3]">
-                        <img src="${item.imgBase}.jpg" alt="${area.title} マシン画像" class="w-full h-full object-contain p-2"
-                             onerror="this.onerror=null;this.src='https://placehold.co/480x360/f4f4f5/888888?text=No+Image';">
-                    </div>
-                `;
-                machineGrid.appendChild(card);
-            });
-        }
-
-        function buildMachineAreaMenu() {
-            gymData.forEach((area, idx) => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.textContent = area.title;
-                btn.className = 'machine-area-btn px-4 py-2 rounded-full border border-joygray bg-white text-sm font-bold hover:border-joyred hover:text-joyred transition';
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.machine-area-btn').forEach((el) => {
-                        el.classList.remove('border-joyred', 'text-joyred', 'bg-red-50');
-                    });
-                    btn.classList.add('border-joyred', 'text-joyred', 'bg-red-50');
-                    renderMachineCards(area.id);
-                });
-                machineAreaMenu.appendChild(btn);
-                if (idx === 0) {
-                    btn.classList.add('border-joyred', 'text-joyred', 'bg-red-50');
-                    renderMachineCards(area.id);
-                }
-            });
-        }
-
         async function postToGoogleSheets(payload) {
             if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL') {
                 return { ok: false, reason: 'missing_endpoint' };
@@ -358,7 +310,6 @@
         createDependencyInputs();
         renderTop5Selected();
         renderTop5Candidates();
-        buildMachineAreaMenu();
     </script>
 </body>
 </html>
