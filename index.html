@@ -30,8 +30,9 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans JP', sans-serif; }
         .focus-ring:focus { outline: 2px solid #C71744; outline-offset: 2px; }
-        .machine-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-        .machine-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .card-ui { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04); }
+        .star-btn { color: #d1d5db; }
+        .star-btn.active { color: #f59e0b; }
     </style>
 </head>
 <body class="bg-joybg text-joytext selection:bg-joyred selection:text-white">
@@ -49,24 +50,45 @@
 
         <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
             <form id="survey-form" class="space-y-6">
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
                     <h2 class="text-xl md:text-2xl font-black text-joyred">1. よく利用しているサービスを複数選択してください</h2>
                     <div id="services-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">2. 各カテゴリの利用度（1:低い / 5:高い）</h2>
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">2. 各カテゴリーの利用度</h2>
+                    <p class="mt-2 text-sm text-gray-600">★1 = 使わない / ★5 = とてもよく使う</p>
                     <div id="dependency-grid" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                <div id="top5-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
                     <h2 class="text-xl md:text-2xl font-black text-joyred">3. あなたのお気に入りマシンをベスト5で教えてください</h2>
-                    <p class="mt-2 text-sm text-gray-600">画像をタップして選択（最大5件）。もう一度タップすると解除されます。</p>
+                    <p class="mt-2 text-sm text-gray-600">画像をタップして選択（最大5件）</p>
                     <div id="top5-selected" class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-2"></div>
                     <div id="top5-candidate-grid" class="mt-4 grid grid-cols-4 gap-3"></div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                <div id="lesson-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. スタジオ・ピラティスについて</h2>
+                    <p class="mt-2 text-sm text-gray-600">該当サービスを選んだ方のみ回答してください</p>
+                    <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                    <div id="studio-subsection" class="mt-5 hidden">
+                        <h3 class="text-base font-black text-joytext">スタジオを選んだ方</h3>
+                        <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
+                        <div id="studio-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                        <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
+                        <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                    </div>
+                    <div id="pilates-subsection" class="mt-6 hidden">
+                        <h3 class="text-base font-black text-joytext">ピラティスを選んだ方</h3>
+                        <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
+                        <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                        <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
+                        <div id="pilates-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
                     <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加して欲しい内容</h2>
                     <label class="block mt-4">
                         <span class="text-sm font-bold">追加して欲しいマシン</span>
@@ -78,7 +100,7 @@
                     </label>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
                     <h2 class="text-xl md:text-2xl font-black text-joyred">5. その他ご意見</h2>
                     <textarea name="freeComment" class="focus-ring mt-3 w-full rounded-xl border border-joygray px-4 py-3" rows="4" placeholder="自由にご記入ください"></textarea>
                 </div>
@@ -134,6 +156,15 @@
 
         const servicesGrid = document.getElementById('services-grid');
         const dependencyGrid = document.getElementById('dependency-grid');
+        const top5Section = document.getElementById('top5-section');
+        const lessonSection = document.getElementById('lesson-section');
+        const weekdayGrid = document.getElementById('weekday-grid');
+        const studioSubsection = document.getElementById('studio-subsection');
+        const pilatesSubsection = document.getElementById('pilates-subsection');
+        const studioLessonGrid = document.getElementById('studio-lesson-grid');
+        const studioInstructorGrid = document.getElementById('studio-instructor-grid');
+        const pilatesLessonGrid = document.getElementById('pilates-lesson-grid');
+        const pilatesInstructorGrid = document.getElementById('pilates-instructor-grid');
         const top5Selected = document.getElementById('top5-selected');
         const top5CandidateGrid = document.getElementById('top5-candidate-grid');
         const form = document.getElementById('survey-form');
@@ -148,6 +179,63 @@
                 area: area.title
             }))
         );
+        const dependencyState = Object.fromEntries(services.map((service) => [service, 3]));
+        const coreMachineServices = ['FWエリア', 'マシンエリア', '有酸素エリア'];
+        const studioServices = ['スタジオ', 'ピラティス'];
+        const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
+        const lessonData = [
+            { name: 'ハタヨガ', instructor: '菊池 智子' },
+            { name: 'ピラティスリフォーマー 魅せるバック＆アームズver2', instructor: 'YUKI' },
+            { name: 'ピラティス', instructor: '菊池 智子' },
+            { name: 'ピラティスリフォーマー チェストオープン', instructor: 'YUKI' },
+            { name: '全身ほぐしヨガ', instructor: 'EMI' },
+            { name: '美姿勢を実感ポールストレッチ / リンパリフレッシュヨガ', instructor: 'MIE' },
+            { name: 'かんたんサーキット', instructor: 'MIE' },
+            { name: 'リラックスヨガ', instructor: '坂東' },
+            { name: 'カラダ調整ヨガ', instructor: '坂東' },
+            { name: 'ハタヨガ', instructor: 'ナカシマ トオル' },
+            { name: 'パワーヨガ', instructor: 'ナカシマ トオル' },
+            { name: 'ホイールで月礼拝', instructor: 'MIE' },
+            { name: 'SHiN美/CoreFunctionalYoga', instructor: 'MIE' },
+            { name: 'ピラティスリフォーマー アーム＆ショルダー', instructor: 'みと' },
+            { name: 'ポール＆ヨガベーシック', instructor: 'Shikano' },
+            { name: 'ピラティスリフォーマー 桃尻メイク', instructor: 'みと' },
+            { name: '朝ヨガ', instructor: 'Mariko' },
+            { name: 'シェイプアップヨガ', instructor: 'Mariko' },
+            { name: 'リズムステップ', instructor: 'Hachi' },
+            { name: 'BODYBALANCE45', instructor: 'Hachi' },
+            { name: 'ホイールで月礼拝/ホイールで遊ぶヨガ', instructor: 'Hana' },
+            { name: '整えるヨガ', instructor: 'Hana' },
+            { name: 'チャクラヒーリングヨガ', instructor: 'MIE' },
+            { name: '腸活ヨガ / 美しい骨盤', instructor: 'MIE' },
+            { name: 'ピラティスリフォーマー 魅せるバック', instructor: 'Hana' },
+            { name: 'スパインコントロールヨガ', instructor: 'YUKI' },
+            { name: 'ピラティスリフォーマー 桃尻メイク', instructor: 'Hana' },
+            { name: 'SHiN癒', instructor: 'YUKI' },
+            { name: '骨盤エクササイズ', instructor: '加藤 早莉' },
+            { name: '背骨コンディショニング', instructor: '加藤 早莉' },
+            { name: '朝ヨガ', instructor: 'kanako' },
+            { name: '美bodyピラティス', instructor: '後藤 亜也' },
+            { name: '顔ヨガ', instructor: '後藤 亜也' },
+            { name: 'おやすみヨガ', instructor: 'YUKI' },
+            { name: 'アグニヨガ', instructor: 'YUKI' },
+            { name: 'BODY BALANCE60', instructor: 'Hachi' },
+            { name: 'フローヨガ', instructor: 'kanako' },
+            { name: 'ベーシックヨガ', instructor: 'kanako' },
+            { name: '全身巡らせ整えるヨガ / アロマリラックス', instructor: 'EMI' },
+            { name: 'パワーヴィンヤサ', instructor: 'itsuku' },
+            { name: '体幹とバランスを鍛えるヨガ', instructor: 'itsuku' },
+            { name: 'フレッチャーピラティス', instructor: '菊池 智子' },
+            { name: 'ピラティスリフォーマー 魅せるバック', instructor: 'みと' },
+            { name: 'BODY BALANCE', instructor: '坂東' },
+            { name: 'カラダ調整ヨガ', instructor: '坂東' },
+            { name: 'ポール&ヨガベーシック', instructor: 'Shikano' },
+            { name: 'リラックスほぐし＆骨盤調整', instructor: 'Shikano' }
+        ];
+        const pilatesLessons = [...new Set(lessonData.filter((x) => x.name.includes('ピラティス')).map((x) => x.name))];
+        const studioLessons = [...new Set(lessonData.filter((x) => !x.name.includes('ピラティス')).map((x) => x.name))];
+        const pilatesInstructors = ['YUKI', 'Hana', 'みと'];
+        const studioInstructors = [...new Set(lessonData.filter((x) => !x.name.includes('ピラティス')).map((x) => x.instructor))];
 
         function createServiceCheckboxes() {
             services.forEach((service) => {
@@ -165,7 +253,7 @@
                 label.innerHTML = `
                     ${maybeImage}
                     <div class="flex items-center gap-2">
-                        <input class="accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
+                        <input class="service-checkbox accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
                         <span class="text-sm font-bold">${service}</span>
                     </div>
                 `;
@@ -175,20 +263,76 @@
 
         function createDependencyInputs() {
             services.forEach((service) => {
-                const wrapper = document.createElement('label');
-                wrapper.className = 'block';
+                const wrapper = document.createElement('div');
+                wrapper.className = 'block bg-white border border-joygray rounded-xl px-3 py-3';
+                const stars = [1, 2, 3, 4, 5]
+                    .map((n) => `<button type="button" data-service="${service}" data-star="${n}" class="star-btn text-2xl leading-none px-0.5 ${n <= dependencyState[service] ? 'active' : ''}">★</button>`)
+                    .join('');
                 wrapper.innerHTML = `
-                    <span class="text-sm font-bold">${service}</span>
-                    <select name="dependency_${service}" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-3 py-2 bg-white">
-                        <option value="1">1（ほぼ使わない）</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5（かなり使う）</option>
-                    </select>
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-sm font-bold">${service}</span>
+                        <div class="flex items-center">${stars}</div>
+                    </div>
                 `;
                 dependencyGrid.appendChild(wrapper);
             });
+            dependencyGrid.querySelectorAll('.star-btn').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const service = button.dataset.service;
+                    const star = Number(button.dataset.star);
+                    dependencyState[service] = star;
+                    refreshStarUi(service);
+                });
+            });
+        }
+
+        function refreshStarUi(service) {
+            const current = dependencyState[service];
+            dependencyGrid.querySelectorAll(`.star-btn[data-service="${service}"]`).forEach((btn) => {
+                const val = Number(btn.dataset.star);
+                btn.classList.toggle('active', val <= current);
+            });
+        }
+
+        function createWeekdayCheckboxes() {
+            weekdays.forEach((day) => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 bg-white border border-joygray rounded-xl px-3 py-2';
+                label.innerHTML = `
+                    <input class="accent-joyred w-4 h-4" type="checkbox" name="lessonWeekdays" value="${day}">
+                    <span class="text-sm font-bold">${day}曜日</span>
+                `;
+                weekdayGrid.appendChild(label);
+            });
+        }
+
+        function createOptionCheckboxGrid(container, name, options) {
+            options.forEach((value) => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 bg-white border border-joygray rounded-xl px-3 py-2';
+                label.innerHTML = `
+                    <input class="accent-joyred w-4 h-4" type="checkbox" name="${name}" value="${value}">
+                    <span class="text-sm">${value}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function updateConditionalSections() {
+            const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map((el) => el.value);
+            const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
+            const showLesson = selectedServices.some((item) => studioServices.includes(item));
+            const showStudio = selectedServices.includes('スタジオ');
+            const showPilates = selectedServices.includes('ピラティス');
+            top5Section.classList.toggle('hidden', !showTop5);
+            lessonSection.classList.toggle('hidden', !showLesson);
+            studioSubsection.classList.toggle('hidden', !showStudio);
+            pilatesSubsection.classList.toggle('hidden', !showPilates);
+            if (!showTop5) {
+                top5Selection.length = 0;
+                renderTop5Selected();
+                renderTop5Candidates();
+            }
         }
 
         function renderTop5Selected() {
@@ -259,8 +403,9 @@
             const formData = new FormData(form);
             const serviceUsage = formData.getAll('serviceUsage');
             const top5 = top5Selection.map((m) => m.label);
+            const showTop5 = serviceUsage.some((item) => coreMachineServices.includes(item));
 
-            if (top5Selection.length === 0) {
+            if (showTop5 && top5Selection.length === 0) {
                 statusText.textContent = 'BEST5を1つ以上選択してください。';
                 statusText.className = 'text-sm text-red-600';
                 return;
@@ -269,16 +414,18 @@
             submitButton.disabled = true;
             submitButton.textContent = '送信中...';
 
-            const dependency = {};
-            services.forEach((service) => {
-                dependency[service] = Number(formData.get(`dependency_${service}`) || 3);
-            });
+            const dependency = { ...dependencyState };
 
             const payload = {
                 submittedAt: new Date().toISOString(),
                 serviceUsage,
                 dependency,
-                top5,
+                top5: showTop5 ? top5 : [],
+                lessonWeekdays: formData.getAll('lessonWeekdays'),
+                studioFavoriteLessons: formData.getAll('studioFavoriteLessons'),
+                studioFavoriteInstructors: formData.getAll('studioFavoriteInstructors'),
+                pilatesFavoriteLessons: formData.getAll('pilatesFavoriteLessons'),
+                pilatesFavoriteInstructors: formData.getAll('pilatesFavoriteInstructors'),
                 wantedMachines: String(formData.get('wantedMachines') || ''),
                 wantedOptions: String(formData.get('wantedOptions') || ''),
                 freeComment: String(formData.get('freeComment') || '')
@@ -291,8 +438,10 @@
                 statusText.className = 'text-sm text-green-700';
                 form.reset();
                 top5Selection.length = 0;
+                services.forEach((service) => { dependencyState[service] = 3; refreshStarUi(service); });
                 renderTop5Selected();
                 renderTop5Candidates();
+                updateConditionalSections();
             } else if (result.reason === 'missing_endpoint') {
                 statusText.textContent = '送信先URL未設定のため、ローカル保存しました。';
                 statusText.className = 'text-sm text-amber-700';
@@ -308,8 +457,17 @@
 
         createServiceCheckboxes();
         createDependencyInputs();
+        createWeekdayCheckboxes();
+        createOptionCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
+        createOptionCheckboxGrid(studioInstructorGrid, 'studioFavoriteInstructors', studioInstructors);
+        createOptionCheckboxGrid(pilatesLessonGrid, 'pilatesFavoriteLessons', pilatesLessons);
+        createOptionCheckboxGrid(pilatesInstructorGrid, 'pilatesFavoriteInstructors', pilatesInstructors);
         renderTop5Selected();
         renderTop5Candidates();
+        document.querySelectorAll('.service-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', updateConditionalSections);
+        });
+        updateConditionalSections();
     </script>
 </body>
 </html>
