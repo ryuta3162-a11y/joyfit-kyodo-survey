@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOYFIT24 経堂 - 会員アンケート</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        joyred: '#C71744',
+                        joybg: '#F9F9F9',
+                        joypanel: '#FFFFFF',
+                        joygray: '#E5E7EB',
+                        joytext: '#333333'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .focus-ring:focus { outline: 2px solid #C71744; outline-offset: 2px; }
+    </style>
+</head>
+<body class="bg-joybg text-joytext selection:bg-joyred selection:text-white">
+    <main class="min-h-screen">
+        <section class="relative w-full bg-joypanel border-b-[8px] border-joyred shadow-sm">
+            <div class="max-w-5xl mx-auto px-4 py-10 md:py-16 text-center">
+                <p class="font-black text-joyred tracking-[0.2em] text-sm md:text-base">JOYFIT24 経堂</p>
+                <h1 class="mt-3 text-3xl md:text-5xl font-black tracking-wide">アンケートのご協力をお願いします</h1>
+                <p class="mt-4 text-sm md:text-base text-gray-600 leading-relaxed">
+                    いつもご利用ありがとうございます。<br>
+                    今後のマシン導入・設備改善・サービス向上のため、率直なご意見をお聞かせください。
+                </p>
+            </div>
+        </section>
+
+        <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
+            <form id="survey-form" class="space-y-6">
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">1. ご利用サービス（複数選択可）</h2>
+                    <div id="services-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">2. 各カテゴリの利用度（1:低い / 5:高い）</h2>
+                    <div id="dependency-grid" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">3. 好きなマシン BEST5</h2>
+                    <p class="mt-2 text-sm text-gray-600">同じマシン名の重複選択はできません。</p>
+                    <div id="top5-grid" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加してほしい内容</h2>
+                    <label class="block mt-4">
+                        <span class="text-sm font-bold">欲しいマシン</span>
+                        <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: ハックスクワット、グルートドライブ など"></textarea>
+                    </label>
+                    <label class="block mt-4">
+                        <span class="text-sm font-bold">欲しいオプション・設備</span>
+                        <textarea name="wantedOptions" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: サプリメントサーバー、コワーキングスペース など"></textarea>
+                    </label>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">5. その他ご意見</h2>
+                    <textarea name="freeComment" class="focus-ring mt-3 w-full rounded-xl border border-joygray px-4 py-3" rows="4" placeholder="自由にご記入ください"></textarea>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-3 md:items-center">
+                    <button id="submit-button" type="submit" class="inline-flex justify-center items-center px-8 py-3 rounded-full bg-joyred text-white font-black tracking-wide hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition">
+                        送信する
+                    </button>
+                    <p id="status-text" class="text-sm text-gray-600"></p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const services = [
+            'フリーウェイト',
+            'マシン',
+            '有酸素',
+            'サウナ',
+            'スタジオ',
+            'ピラティス',
+            'エステ',
+            'タンニング'
+        ];
+
+        const machineCandidates = [
+            'チェストプレス',
+            'ラットプルダウン',
+            'レッグプレス',
+            'スミスマシン',
+            'ケーブルクロス',
+            'ショルダープレス',
+            'アブドミナル',
+            'トレッドミル',
+            'クロストレーナー',
+            'バイク',
+            'ローイング',
+            'パワーラック',
+            'ダンベル',
+            'ベンチプレス',
+            'ヒップスラスト'
+        ];
+
+        // Google Apps Script WebアプリURLに差し替えてください
+        const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL';
+
+        const servicesGrid = document.getElementById('services-grid');
+        const dependencyGrid = document.getElementById('dependency-grid');
+        const top5Grid = document.getElementById('top5-grid');
+        const form = document.getElementById('survey-form');
+        const statusText = document.getElementById('status-text');
+        const submitButton = document.getElementById('submit-button');
+
+        function createServiceCheckboxes() {
+            services.forEach((service) => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 bg-gray-50 border border-joygray rounded-xl px-3 py-2';
+                label.innerHTML = `
+                    <input class="accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
+                    <span class="text-sm font-bold">${service}</span>
+                `;
+                servicesGrid.appendChild(label);
+            });
+        }
+
+        function createDependencyInputs() {
+            services.forEach((service) => {
+                const wrapper = document.createElement('label');
+                wrapper.className = 'block';
+                wrapper.innerHTML = `
+                    <span class="text-sm font-bold">${service}</span>
+                    <select name="dependency_${service}" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-3 py-2 bg-white">
+                        <option value="1">1（ほぼ使わない）</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5（かなり使う）</option>
+                    </select>
+                `;
+                dependencyGrid.appendChild(wrapper);
+            });
+        }
+
+        function createTop5Selects() {
+            for (let i = 1; i <= 5; i += 1) {
+                const wrapper = document.createElement('label');
+                wrapper.className = 'block';
+                const options = machineCandidates
+                    .map((machine) => `<option value="${machine}">${machine}</option>`)
+                    .join('');
+                wrapper.innerHTML = `
+                    <span class="text-sm font-bold">第${i}位</span>
+                    <select data-rank="${i}" name="top${i}" class="top-machine focus-ring mt-2 w-full rounded-xl border border-joygray px-3 py-2 bg-white">
+                        <option value="">選択してください</option>
+                        ${options}
+                    </select>
+                `;
+                top5Grid.appendChild(wrapper);
+            }
+        }
+
+        function hasDuplicateTop5(values) {
+            const filtered = values.filter(Boolean);
+            return new Set(filtered).size !== filtered.length;
+        }
+
+        async function postToGoogleSheets(payload) {
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL') {
+                return { ok: false, reason: 'missing_endpoint' };
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                return { ok: response.ok };
+            } catch (error) {
+                return { ok: false, reason: 'network_error', error };
+            }
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            statusText.textContent = '';
+
+            const formData = new FormData(form);
+            const serviceUsage = formData.getAll('serviceUsage');
+            const top5 = [1, 2, 3, 4, 5].map((rank) => String(formData.get(`top${rank}`) || ''));
+
+            if (hasDuplicateTop5(top5)) {
+                statusText.textContent = 'BEST5に同じマシンがあります。重複しないよう選択してください。';
+                statusText.className = 'text-sm text-red-600';
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+
+            const dependency = {};
+            services.forEach((service) => {
+                dependency[service] = Number(formData.get(`dependency_${service}`) || 3);
+            });
+
+            const payload = {
+                submittedAt: new Date().toISOString(),
+                serviceUsage,
+                dependency,
+                top5,
+                wantedMachines: String(formData.get('wantedMachines') || ''),
+                wantedOptions: String(formData.get('wantedOptions') || ''),
+                freeComment: String(formData.get('freeComment') || '')
+            };
+
+            const result = await postToGoogleSheets(payload);
+
+            if (result.ok) {
+                statusText.textContent = '送信ありがとうございました。ご協力に感謝します。';
+                statusText.className = 'text-sm text-green-700';
+                form.reset();
+            } else if (result.reason === 'missing_endpoint') {
+                statusText.textContent = '送信先URL未設定のため、ローカル保存しました。';
+                statusText.className = 'text-sm text-amber-700';
+                localStorage.setItem('joyfit-survey-last', JSON.stringify(payload));
+            } else {
+                statusText.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+                statusText.className = 'text-sm text-red-600';
+            }
+
+            submitButton.disabled = false;
+            submitButton.textContent = '送信する';
+        });
+
+        createServiceCheckboxes();
+        createDependencyInputs();
+        createTop5Selects();
+    </script>
+</body>
+</html>
