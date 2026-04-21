@@ -31,8 +31,37 @@
         body { font-family: 'Noto Sans JP', sans-serif; }
         .focus-ring:focus { outline: 2px solid #C71744; outline-offset: 2px; }
         .card-ui { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04); }
-        .star-btn { color: #d1d5db; }
-        .star-btn.active { color: #f59e0b; }
+        .star-btn {
+            width: 2.25rem;
+            height: 2.25rem;
+            color: #d1d5db;
+            font-size: 2rem;
+            line-height: 1;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+        }
+        .star-btn:active { transform: scale(0.94); }
+        .star-btn.active {
+            color: #f59e0b;
+            text-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
+            transform: translateY(-1px) scale(1.07);
+        }
+        .star-btn.popped {
+            animation: star-pop 220ms ease-out;
+        }
+        @keyframes star-pop {
+            0% { transform: scale(0.85); }
+            60% { transform: scale(1.16); }
+            100% { transform: scale(1.07); }
+        }
+        .lesson-chip {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.8rem;
+            background: #fff;
+            padding: 0.6rem 0.7rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .lesson-chip:hover { border-color: #C71744; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
     </style>
 </head>
 <body class="bg-joybg text-joytext selection:bg-joyred selection:text-white">
@@ -183,59 +212,57 @@
         const coreMachineServices = ['FWエリア', 'マシンエリア', '有酸素エリア'];
         const studioServices = ['スタジオ', 'ピラティス'];
         const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
-        const lessonData = [
-            { name: 'ハタヨガ', instructor: '菊池 智子' },
-            { name: 'ピラティスリフォーマー 魅せるバック＆アームズver2', instructor: 'YUKI' },
-            { name: 'ピラティス', instructor: '菊池 智子' },
-            { name: 'ピラティスリフォーマー チェストオープン', instructor: 'YUKI' },
-            { name: '全身ほぐしヨガ', instructor: 'EMI' },
-            { name: '美姿勢を実感ポールストレッチ / リンパリフレッシュヨガ', instructor: 'MIE' },
-            { name: 'かんたんサーキット', instructor: 'MIE' },
-            { name: 'リラックスヨガ', instructor: '坂東' },
-            { name: 'カラダ調整ヨガ', instructor: '坂東' },
-            { name: 'ハタヨガ', instructor: 'ナカシマ トオル' },
-            { name: 'パワーヨガ', instructor: 'ナカシマ トオル' },
-            { name: 'ホイールで月礼拝', instructor: 'MIE' },
-            { name: 'SHiN美/CoreFunctionalYoga', instructor: 'MIE' },
-            { name: 'ピラティスリフォーマー アーム＆ショルダー', instructor: 'みと' },
-            { name: 'ポール＆ヨガベーシック', instructor: 'Shikano' },
-            { name: 'ピラティスリフォーマー 桃尻メイク', instructor: 'みと' },
-            { name: '朝ヨガ', instructor: 'Mariko' },
-            { name: 'シェイプアップヨガ', instructor: 'Mariko' },
-            { name: 'リズムステップ', instructor: 'Hachi' },
-            { name: 'BODYBALANCE45', instructor: 'Hachi' },
-            { name: 'ホイールで月礼拝/ホイールで遊ぶヨガ', instructor: 'Hana' },
-            { name: '整えるヨガ', instructor: 'Hana' },
-            { name: 'チャクラヒーリングヨガ', instructor: 'MIE' },
-            { name: '腸活ヨガ / 美しい骨盤', instructor: 'MIE' },
-            { name: 'ピラティスリフォーマー 魅せるバック', instructor: 'Hana' },
-            { name: 'スパインコントロールヨガ', instructor: 'YUKI' },
-            { name: 'ピラティスリフォーマー 桃尻メイク', instructor: 'Hana' },
-            { name: 'SHiN癒', instructor: 'YUKI' },
-            { name: '骨盤エクササイズ', instructor: '加藤 早莉' },
-            { name: '背骨コンディショニング', instructor: '加藤 早莉' },
-            { name: '朝ヨガ', instructor: 'kanako' },
-            { name: '美bodyピラティス', instructor: '後藤 亜也' },
-            { name: '顔ヨガ', instructor: '後藤 亜也' },
-            { name: 'おやすみヨガ', instructor: 'YUKI' },
-            { name: 'アグニヨガ', instructor: 'YUKI' },
-            { name: 'BODY BALANCE60', instructor: 'Hachi' },
-            { name: 'フローヨガ', instructor: 'kanako' },
-            { name: 'ベーシックヨガ', instructor: 'kanako' },
-            { name: '全身巡らせ整えるヨガ / アロマリラックス', instructor: 'EMI' },
-            { name: 'パワーヴィンヤサ', instructor: 'itsuku' },
-            { name: '体幹とバランスを鍛えるヨガ', instructor: 'itsuku' },
-            { name: 'フレッチャーピラティス', instructor: '菊池 智子' },
-            { name: 'ピラティスリフォーマー 魅せるバック', instructor: 'みと' },
-            { name: 'BODY BALANCE', instructor: '坂東' },
-            { name: 'カラダ調整ヨガ', instructor: '坂東' },
-            { name: 'ポール&ヨガベーシック', instructor: 'Shikano' },
-            { name: 'リラックスほぐし＆骨盤調整', instructor: 'Shikano' }
+        const lessonSchedule = [
+            { day: '月', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'ハタヨガ', star: '★', instructor: '菊池 智子' },
+            { day: '月', area: 'ピラティスルーム', start: '10:30', end: '11:30', name: 'ピラティスリフォーマー 魅せるバック＆アームズver2', star: '★★★', instructor: 'YUKI' },
+            { day: '月', area: 'ホットスタジオ', start: '10:45', end: '11:45', name: 'ピラティス', star: '★～★★', instructor: '菊池 智子' },
+            { day: '月', area: 'ピラティスルーム', start: '12:00', end: '13:00', name: 'ピラティスリフォーマー チェストオープン', star: '★★', instructor: 'YUKI' },
+            { day: '月', area: 'ホットスタジオ', start: '12:15', end: '13:15', name: '全身ほぐしヨガ', star: '★', instructor: 'EMI' },
+            { day: '月', area: 'ホットスタジオ', start: '13:45', end: '14:45', name: '美姿勢を実感ポールストレッチ / リンパリフレッシュヨガ', star: '★', instructor: 'MIE' },
+            { day: '月', area: 'ホットスタジオ', start: '15:15', end: '16:15', name: 'かんたんサーキット', star: '★★★', instructor: 'MIE' },
+            { day: '月', area: 'ホットスタジオ', start: '18:30', end: '19:15', name: 'リラックスヨガ', star: '★', instructor: '坂東' },
+            { day: '月', area: 'ホットスタジオ', start: '19:30', end: '20:30', name: 'カラダ調整ヨガ', star: '★★', instructor: '坂東' },
+            { day: '火', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'ハタヨガ', star: '★～★★', instructor: 'ナカシマ トオル' },
+            { day: '火', area: 'ホットスタジオ', start: '10:45', end: '11:45', name: 'パワーヨガ', star: '★★～★★★', instructor: 'ナカシマ トオル' },
+            { day: '火', area: 'ホットスタジオ', start: '12:15', end: '13:15', name: 'ホイールで月礼拝', star: '★', instructor: 'MIE' },
+            { day: '火', area: 'ホットスタジオ', start: '13:45', end: '14:45', name: 'SHiN美/CoreFunctionalYoga', star: '★★★', instructor: 'MIE' },
+            { day: '火', area: 'ピラティスルーム', start: '18:15', end: '19:15', name: 'ピラティスリフォーマー アーム＆ショルダー', star: '★★★', instructor: 'みと' },
+            { day: '火', area: 'ホットスタジオ', start: '19:30', end: '20:45', name: 'ポール＆ヨガベーシック', star: '★', instructor: 'Shikano' },
+            { day: '火', area: 'ピラティスルーム', start: '19:45', end: '20:45', name: 'ピラティスリフォーマー 桃尻メイク', star: '★★★', instructor: 'みと' },
+            { day: '水', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: '朝ヨガ', star: '★', instructor: 'Mariko' },
+            { day: '水', area: 'ホットスタジオ', start: '10:45', end: '11:45', name: 'シェイプアップヨガ', star: '★★', instructor: 'Mariko' },
+            { day: '水', area: 'ホットスタジオ', start: '13:30', end: '14:30', name: 'リズムステップ', star: '★★', instructor: 'Hachi' },
+            { day: '水', area: 'ホットスタジオ', start: '15:00', end: '15:45', name: 'BODYBALANCE45', star: '★★', instructor: 'Hachi' },
+            { day: '水', area: 'ホットスタジオ', start: '18:15', end: '19:00', name: 'ホイールで月礼拝/ホイールで遊ぶヨガ', star: '★★', instructor: 'Hana' },
+            { day: '水', area: 'ホットスタジオ', start: '19:30', end: '20:30', name: '整えるヨガ', star: '★★', instructor: 'Hana' },
+            { day: '木', area: 'ホットスタジオ', start: '10:00', end: '11:00', name: 'チャクラヒーリングヨガ', star: '★★', instructor: 'MIE' },
+            { day: '木', area: 'ホットスタジオ', start: '11:30', end: '12:30', name: '腸活ヨガ / 美しい骨盤', star: '★', instructor: 'MIE' },
+            { day: '木', area: 'ピラティスルーム', start: '12:45', end: '13:45', name: 'ピラティスリフォーマー 魅せるバック', star: '★★★', instructor: 'Hana' },
+            { day: '木', area: 'ホットスタジオ', start: '13:00', end: '14:00', name: 'スパインコントロールヨガ', star: '★★', instructor: 'YUKI' },
+            { day: '木', area: 'ピラティスルーム', start: '14:15', end: '15:15', name: 'ピラティスリフォーマー 桃尻メイク', star: '★★★', instructor: 'Hana' },
+            { day: '木', area: 'ホットスタジオ', start: '14:30', end: '15:30', name: 'SHiN癒', star: '★', instructor: 'YUKI' },
+            { day: '木', area: 'ホットスタジオ', start: '18:15', end: '19:15', name: '骨盤エクササイズ', star: '★★', instructor: '加藤 早莉' },
+            { day: '木', area: 'ホットスタジオ', start: '19:45', end: '20:45', name: '背骨コンディショニング', star: '★', instructor: '加藤 早莉' },
+            { day: '金', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: '朝ヨガ', star: '★', instructor: 'kanako' },
+            { day: '金', area: 'ホットスタジオ', start: '11:00', end: '12:00', name: '美bodyピラティス', star: '★★', instructor: '後藤 亜也' },
+            { day: '金', area: 'ホットスタジオ', start: '12:15', end: '13:15', name: '顔ヨガ', star: '★', instructor: '後藤 亜也' },
+            { day: '金', area: 'ホットスタジオ', start: '13:45', end: '14:45', name: 'おやすみヨガ', star: '★', instructor: 'YUKI' },
+            { day: '金', area: 'ホットスタジオ', start: '15:15', end: '16:15', name: 'アグニヨガ', star: '★★★', instructor: 'YUKI' },
+            { day: '金', area: 'ホットスタジオ', start: '19:45', end: '20:45', name: 'BODY BALANCE60', star: '★★★', instructor: 'Hachi' },
+            { day: '土', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'フローヨガ', star: '★★', instructor: 'kanako' },
+            { day: '土', area: 'ホットスタジオ', start: '11:00', end: '12:00', name: 'ベーシックヨガ', star: '★', instructor: 'kanako' },
+            { day: '土', area: 'ホットスタジオ', start: '12:30', end: '13:30', name: '全身巡らせ整えるヨガ / アロマリラックス', star: '★★', instructor: 'EMI' },
+            { day: '土', area: 'ホットスタジオ', start: '14:15', end: '15:15', name: 'パワーヴィンヤサ', star: '★★', instructor: 'itsuku' },
+            { day: '土', area: 'ホットスタジオ', start: '15:45', end: '16:45', name: '体幹とバランスを鍛えるヨガ', star: '★★★', instructor: 'itsuku' },
+            { day: '日', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'フレッチャーピラティス', star: '★★', instructor: '菊池 智子' },
+            { day: '日', area: 'ピラティスルーム', start: '11:00', end: '12:00', name: 'ピラティスリフォーマー 魅せるバック', star: '★★★', instructor: 'みと' },
+            { day: '日', area: 'ホットスタジオ', start: '12:45', end: '13:45', name: 'BODY BALANCE', star: '★★★', instructor: '坂東' },
+            { day: '日', area: 'ホットスタジオ', start: '14:00', end: '14:45', name: 'カラダ調整ヨガ', star: '★', instructor: '坂東' },
+            { day: '日', area: 'ホットスタジオ', start: '15:15', end: '16:30', name: 'ポール&ヨガベーシック', star: '★☆', instructor: 'Shikano' },
+            { day: '日', area: 'ホットスタジオ', start: '16:45', end: '17:45', name: 'リラックスほぐし＆骨盤調整', star: '★', instructor: 'Shikano' }
         ];
-        const pilatesLessons = [...new Set(lessonData.filter((x) => x.name.includes('ピラティス')).map((x) => x.name))];
-        const studioLessons = [...new Set(lessonData.filter((x) => !x.name.includes('ピラティス')).map((x) => x.name))];
         const pilatesInstructors = ['YUKI', 'Hana', 'みと'];
-        const studioInstructors = [...new Set(lessonData.filter((x) => !x.name.includes('ピラティス')).map((x) => x.instructor))];
+        const studioInstructors = [...new Set(lessonSchedule.filter((x) => x.area === 'ホットスタジオ').map((x) => x.instructor))];
 
         function createServiceCheckboxes() {
             services.forEach((service) => {
@@ -282,6 +309,9 @@
                     const star = Number(button.dataset.star);
                     dependencyState[service] = star;
                     refreshStarUi(service);
+                    button.classList.remove('popped');
+                    void button.offsetWidth;
+                    button.classList.add('popped');
                 });
             });
         }
@@ -318,16 +348,43 @@
             });
         }
 
+        function createLessonCheckboxGrid(container, name, lessons) {
+            container.innerHTML = '';
+            lessons.forEach((lesson) => {
+                const label = document.createElement('label');
+                label.className = 'lesson-chip';
+                label.innerHTML = `
+                    <div class="flex items-start gap-2">
+                        <input class="accent-joyred w-4 h-4 mt-1" type="checkbox" name="${name}" value="${lesson.day} ${lesson.start}-${lesson.end} ${lesson.name} / ${lesson.instructor}">
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold leading-snug">${lesson.name}</p>
+                            <p class="text-xs text-gray-600 mt-1">${lesson.day} ${lesson.start}-${lesson.end} ・ ${lesson.area}</p>
+                            <p class="text-xs text-gray-600">${lesson.star} ・ ${lesson.instructor}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(label);
+            });
+        }
+
         function updateConditionalSections() {
             const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map((el) => el.value);
             const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
             const showLesson = selectedServices.some((item) => studioServices.includes(item));
             const showStudio = selectedServices.includes('スタジオ');
             const showPilates = selectedServices.includes('ピラティス');
+            const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
+            const filteredByDay = selectedDays.length
+                ? lessonSchedule.filter((x) => selectedDays.includes(x.day))
+                : lessonSchedule;
+            const studioLessons = filteredByDay.filter((x) => x.area === 'ホットスタジオ');
+            const pilatesLessons = filteredByDay.filter((x) => x.area === 'ピラティスルーム');
             top5Section.classList.toggle('hidden', !showTop5);
             lessonSection.classList.toggle('hidden', !showLesson);
             studioSubsection.classList.toggle('hidden', !showStudio);
             pilatesSubsection.classList.toggle('hidden', !showPilates);
+            if (showStudio) createLessonCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
+            if (showPilates) createLessonCheckboxGrid(pilatesLessonGrid, 'pilatesFavoriteLessons', pilatesLessons);
             if (!showTop5) {
                 top5Selection.length = 0;
                 renderTop5Selected();
@@ -458,13 +515,14 @@
         createServiceCheckboxes();
         createDependencyInputs();
         createWeekdayCheckboxes();
-        createOptionCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
         createOptionCheckboxGrid(studioInstructorGrid, 'studioFavoriteInstructors', studioInstructors);
-        createOptionCheckboxGrid(pilatesLessonGrid, 'pilatesFavoriteLessons', pilatesLessons);
         createOptionCheckboxGrid(pilatesInstructorGrid, 'pilatesFavoriteInstructors', pilatesInstructors);
         renderTop5Selected();
         renderTop5Candidates();
         document.querySelectorAll('.service-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', updateConditionalSections);
+        });
+        document.querySelectorAll('input[name="lessonWeekdays"]').forEach((checkbox) => {
             checkbox.addEventListener('change', updateConditionalSections);
         });
         updateConditionalSections();
