@@ -30,6 +30,8 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans JP', sans-serif; }
         .focus-ring:focus { outline: 2px solid #C71744; outline-offset: 2px; }
+        .machine-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .machine-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
     </style>
 </head>
 <body class="bg-joybg text-joytext selection:bg-joyred selection:text-white">
@@ -42,6 +44,15 @@
                     いつもご利用ありがとうございます。<br>
                     今後のマシン導入・設備改善・サービス向上のため、率直なご意見をお聞かせください。
                 </p>
+            </div>
+        </section>
+
+        <section class="max-w-6xl mx-auto px-4 pt-8 md:pt-12">
+            <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 shadow-sm">
+                <h2 class="text-xl md:text-2xl font-black text-joyred">マシンラインナップ（参考）</h2>
+                <p class="mt-2 text-sm text-gray-600">実際によく使うマシンを思い出しながら、下のアンケートにご回答ください。</p>
+                <div id="machine-area-menu" class="mt-4 flex flex-wrap gap-2"></div>
+                <div id="machine-grid" class="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4"></div>
             </div>
         </section>
 
@@ -120,9 +131,25 @@
             'ヒップスラスト'
         ];
 
+        const gymData = [
+            { id: 'cardio', title: '有酸素マシン', items: [{ imgBase: 'cardio_1' }, { imgBase: 'cardio_2' }, { imgBase: 'cardio_3' }] },
+            { id: 'resistance', title: 'ウェイトマシン', items: [
+                { imgBase: 'resistance_1' }, { imgBase: 'resistance_2' }, { imgBase: 'resistance_3' }, { imgBase: 'resistance_4' }, { imgBase: 'resistance_5' },
+                { imgBase: 'resistance_6' }, { imgBase: 'resistance_7' }, { imgBase: 'resistance_8' }, { imgBase: 'resistance_9' }, { imgBase: 'resistance_10' },
+                { imgBase: 'resistance_11' }, { imgBase: 'resistance_12' }, { imgBase: 'resistance_13' }, { imgBase: 'resistance_14' }, { imgBase: 'resistance_15' }
+            ] },
+            { id: 'freeweight', title: 'フリーウェイト', items: [
+                { imgBase: 'freeweight_1' }, { imgBase: 'freeweight_2' }, { imgBase: 'freeweight_3' }, { imgBase: 'freeweight_4' }, { imgBase: 'freeweight_5' },
+                { imgBase: 'freeweight_6' }, { imgBase: 'freeweight_7' }, { imgBase: 'freeweight_8' }, { imgBase: 'freeweight_9' }, { imgBase: 'freeweight_10' },
+                { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
+            ] }
+        ];
+
         // Google Apps Script WebアプリURLに差し替えてください
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
+        const machineAreaMenu = document.getElementById('machine-area-menu');
+        const machineGrid = document.getElementById('machine-grid');
         const servicesGrid = document.getElementById('services-grid');
         const dependencyGrid = document.getElementById('dependency-grid');
         const top5Grid = document.getElementById('top5-grid');
@@ -176,6 +203,43 @@
                 `;
                 top5Grid.appendChild(wrapper);
             }
+        }
+
+        function renderMachineCards(areaId) {
+            const area = gymData.find((x) => x.id === areaId) || gymData[0];
+            machineGrid.innerHTML = '';
+            area.items.forEach((item) => {
+                const card = document.createElement('article');
+                card.className = 'machine-card bg-white border border-joygray rounded-xl overflow-hidden';
+                card.innerHTML = `
+                    <div class="aspect-[4/3]">
+                        <img src="${item.imgBase}.jpg" alt="${area.title} マシン画像" class="w-full h-full object-contain p-2"
+                             onerror="this.onerror=null;this.src='https://placehold.co/480x360/f4f4f5/888888?text=No+Image';">
+                    </div>
+                `;
+                machineGrid.appendChild(card);
+            });
+        }
+
+        function buildMachineAreaMenu() {
+            gymData.forEach((area, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = area.title;
+                btn.className = 'machine-area-btn px-4 py-2 rounded-full border border-joygray bg-white text-sm font-bold hover:border-joyred hover:text-joyred transition';
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.machine-area-btn').forEach((el) => {
+                        el.classList.remove('border-joyred', 'text-joyred', 'bg-red-50');
+                    });
+                    btn.classList.add('border-joyred', 'text-joyred', 'bg-red-50');
+                    renderMachineCards(area.id);
+                });
+                machineAreaMenu.appendChild(btn);
+                if (idx === 0) {
+                    btn.classList.add('border-joyred', 'text-joyred', 'bg-red-50');
+                    renderMachineCards(area.id);
+                }
+            });
         }
 
         function hasDuplicateTop5(values) {
@@ -254,6 +318,7 @@
         createServiceCheckboxes();
         createDependencyInputs();
         createTop5Selects();
+        buildMachineAreaMenu();
     </script>
 </body>
 </html>
