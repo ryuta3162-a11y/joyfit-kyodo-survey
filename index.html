@@ -179,6 +179,14 @@
                 { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
             ] }
         ];
+        // BEST5で表示するマシン名。内部ID(resistance_2等)はUIに出さない。
+        const machineDisplayNames = {
+            cardio_1: 'トレッドミル',
+            cardio_2: 'クロストレーナー',
+            cardio_3: 'エアロバイク（リカンベント含む）',
+            freeweight_1: 'パワーラック',
+            resistance_1: 'レッグプレス'
+        };
 
         // Google Apps Script WebアプリURLに差し替えてください
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
@@ -204,7 +212,7 @@
         const allMachineCandidates = gymData.flatMap((area) =>
             area.items.map((item) => ({
                 id: item.imgBase,
-                label: item.imgBase.replace('_', ' '),
+                label: machineDisplayNames[item.imgBase] || '名称確認中',
                 img: `${item.imgBase}.jpg`,
                 area: area.title
             }))
