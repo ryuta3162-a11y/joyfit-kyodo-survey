@@ -113,6 +113,11 @@
             'エステ',
             'タンニング'
         ];
+        const serviceImages = {
+            'スタジオ': '16.png',
+            'ピラティス': '17.png',
+            'サウナ': '18.png'
+        };
 
         const gymData = [
             { id: 'cardio', title: '有酸素マシン', items: [{ imgBase: 'cardio_1' }, { imgBase: 'cardio_2' }, { imgBase: 'cardio_3' }] },
@@ -153,10 +158,21 @@
         function createServiceCheckboxes() {
             services.forEach((service) => {
                 const label = document.createElement('label');
-                label.className = 'flex items-center gap-2 bg-gray-50 border border-joygray rounded-xl px-3 py-2';
+                label.className = 'block bg-white border border-joygray rounded-xl p-2 hover:border-joyred transition';
+                const maybeImage = serviceImages[service]
+                    ? `
+                        <div class="rounded-lg overflow-hidden bg-gray-50 mb-2">
+                            <img src="${serviceImages[service]}" alt="${service}" class="w-full h-24 object-cover"
+                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                        </div>
+                    `
+                    : '';
                 label.innerHTML = `
-                    <input class="accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
-                    <span class="text-sm font-bold">${service}</span>
+                    ${maybeImage}
+                    <div class="flex items-center gap-2">
+                        <input class="accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
+                        <span class="text-sm font-bold">${service}</span>
+                    </div>
                 `;
                 servicesGrid.appendChild(label);
             });
