@@ -445,7 +445,6 @@
                     ${isSelected ? `<span class="absolute top-1 left-1 z-10 text-[10px] px-1.5 py-0.5 bg-joyred text-white rounded-full font-black">${rank}位</span>` : ''}
                     <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain"
                          onerror="this.onerror=null;this.src='https://placehold.co/120x120/f4f4f5/888888?text=No+Image';">
-                    <span class="block text-[10px] mt-1 text-center text-gray-600">${machine.label}</span>
                 `;
                 button.addEventListener('click', () => toggleTop5(machine.id));
                 top5CandidateGrid.appendChild(button);
