@@ -212,7 +212,7 @@
         const allMachineCandidates = gymData.flatMap((area) =>
             area.items.map((item) => ({
                 id: item.imgBase,
-                label: machineDisplayNames[item.imgBase] || '名称確認中',
+                label: machineDisplayNames[item.imgBase] || '',
                 img: `${item.imgBase}.jpg`,
                 area: area.title
             }))
@@ -415,7 +415,7 @@
                 const box = document.createElement('div');
                 box.className = 'border border-joygray rounded-xl bg-white p-2 min-h-[52px] flex items-center';
                 box.innerHTML = selected
-                    ? `<div class="text-sm"><span class="font-black text-joyred mr-1">${i + 1}位</span><span>${selected.label}</span></div>`
+                    ? `<div class="text-sm"><span class="font-black text-joyred mr-1">${i + 1}位</span><span>選択済み</span></div>`
                     : `<div class="text-sm text-gray-400"><span class="font-black mr-1">${i + 1}位</span>未選択</div>`;
                 top5Selected.appendChild(box);
             }
