@@ -444,10 +444,9 @@
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                return { ok: response.ok };
+                return { ok: response.ok, status: response.status };
             } catch (error) {
                 return { ok: false, reason: 'network_error', error };
             }
