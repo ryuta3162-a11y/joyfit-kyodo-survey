@@ -172,27 +172,36 @@ const SERVICE_IMAGE_DATA_URLS = {"FWエリア":"data:image/jpeg;base64,/9j/2wBDA
                 { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
             ] }
         ];
-        const machineDisplayNames = {
-            cardio_1: 'トレッドミル',
-            cardio_2: 'クロストレーナー',
-            cardio_3: 'エアロバイク（リカンベント含む）',
-            freeweight_1: 'パワーラック',
-            resistance_1: 'レッグプレス（脚全体・もも前・お尻）',
-            resistance_2: 'レッグエクステンション（もも前・大腿四頭筋）',
-            resistance_3: 'レッグカール（太もも裏・ハムストリング）',
-            resistance_4: 'アダクター（内もも）',
-            resistance_5: 'アブダクター（外もも・お尻）',
-            resistance_6: 'ヒップ＆グルート（お尻・ハムストリング）',
-            resistance_7: 'ラットプルダウン（広背筋・背中）',
-            resistance_8: 'シーテッドロー（背中・僧帽筋）',
-            resistance_9: 'リアデルト（肩裏・三角筋後部）',
-            resistance_10: 'チェストプレス（大胸筋）',
-            resistance_11: 'ショルダープレス（肩・三角筋）',
-            resistance_12: 'バイセップカール（上腕二頭筋）',
-            resistance_13: 'トライセップ（上腕三頭筋）',
-            resistance_14: 'アブドミナル（腹筋）',
-            resistance_15: 'バックエクステンション（腰裏・脊柱起立筋）'
-        };
+        /** resistance_N.jpg のPOP表記（index.html と同一） */
+        const RESISTANCE_LABELS = [
+            'レッグプレス',
+            'ショルダープレス',
+            'ペックフライ／リアデルト',
+            'ラットプルダウン',
+            'グルート',
+            'シットアップベンチ',
+            'バックエクステンション',
+            'レッグエクステンション',
+            'レッグカール',
+            'ヒップアブダクション',
+            'ヒップアダクション',
+            'ロータリートルソー',
+            'チェストプレス',
+            'シーテッドロー',
+            'アブドミナル'
+        ];
+        const machineDisplayNames = (function () {
+            const o = {
+                cardio_1: 'トレッドミル',
+                cardio_2: 'クロストレーナー',
+                cardio_3: 'エアロバイク／リクラインバイク',
+                freeweight_1: 'パワーラック'
+            };
+            RESISTANCE_LABELS.forEach(function (label, i) {
+                o['resistance_' + (i + 1)] = label;
+            });
+            return o;
+        })();
 
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
@@ -526,14 +535,10 @@ const SERVICE_IMAGE_DATA_URLS = {"FWエリア":"data:image/jpeg;base64,/9j/2wBDA
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = `relative border rounded-lg overflow-hidden bg-white p-1 transition ${isSelected ? 'border-joyred ring-2 ring-red-200' : 'border-joygray hover:border-joyred'}`;
-                const caption = machine.label
-                    ? `<p class="mt-1 px-0.5 text-[10px] md:text-[11px] leading-snug text-center text-gray-700 line-clamp-3">${machine.label}</p>`
-                    : '';
                 button.innerHTML = `
                     ${isSelected ? `<span class="absolute top-1 left-1 z-10 text-[10px] px-1.5 py-0.5 bg-joyred text-white rounded-full font-black">${rank}位</span>` : ''}
-                    <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain"
+                    <img src="${machine.img}" alt="${machine.label || 'マシン'}" class="w-full aspect-square object-contain"
                          onerror="this.onerror=null;this.src='https://placehold.co/120x120/f4f4f5/888888?text=No+Image';">
-                    ${caption}
                 `;
                 button.addEventListener('click', () => toggleTop5(machine.id));
                 top5CandidateGrid.appendChild(button);

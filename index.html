@@ -170,31 +170,30 @@
             ] }
         ];
         /**
-         * resistance_1.jpg 〜 resistance_15.jpg の並び（左から等）に対応する表示名。
-         * 写真とズレる場合はこの配列の順だけ入れ替えてください（ファイル名は変えない）。
+         * resistance_1.jpg 〜 resistance_15.jpg のPOP表記に対応（実機写真の文言に合わせて更新）。
          */
         const RESISTANCE_LABELS = [
             'レッグプレス',
+            'ショルダープレス',
+            'ペックフライ／リアデルト',
+            'ラットプルダウン',
+            'グルート',
+            'シットアップベンチ',
+            'バックエクステンション',
             'レッグエクステンション',
             'レッグカール',
-            'アダクター',
-            'アブダクター',
-            'ヒップ＆グルート',
-            'ラットプルダウン',
-            'シーテッドロー',
-            'リアデルト',
+            'ヒップアブダクション',
+            'ヒップアダクション',
+            'ロータリートルソー',
             'チェストプレス',
-            'ショルダープレス',
-            'バイセップカール',
-            'トライセップ',
-            'アブドミナル',
-            'バックエクステンション'
+            'シーテッドロー',
+            'アブドミナル'
         ];
         const machineDisplayNames = (function () {
             const o = {
                 cardio_1: 'トレッドミル',
                 cardio_2: 'クロストレーナー',
-                cardio_3: 'エアロバイク',
+                cardio_3: 'エアロバイク／リクラインバイク',
                 freeweight_1: 'パワーラック'
             };
             RESISTANCE_LABELS.forEach((label, i) => {
@@ -562,17 +561,13 @@
                 button.className = `relative border rounded-lg overflow-hidden p-1 transition ${
                     isSelected ? 'border-gray-500 bg-gray-200' : 'border-joygray bg-white hover:border-gray-400'
                 }`;
-                const caption = machine.label
-                    ? `<p class="mt-1 px-0.5 text-[10px] md:text-[11px] leading-snug text-center text-gray-700 line-clamp-3">${machine.label}</p>`
-                    : '';
                 const mark = isSelected
                     ? `<span class="absolute top-1 left-1 z-10 flex h-6 w-6 items-center justify-center rounded border border-gray-600 bg-white text-[11px] font-bold text-gray-800 shadow-sm" title="${rank}位">✓</span>`
                     : '';
                 button.innerHTML = `
                     ${mark}
-                    <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain ${isSelected ? 'opacity-60' : ''}"
+                    <img src="${machine.img}" alt="${machine.label || 'マシン'}" class="w-full aspect-square object-contain ${isSelected ? 'opacity-60' : ''}"
                          onerror="this.onerror=null;this.src='https://placehold.co/120x120/f4f4f5/888888?text=No+Image';">
-                    ${caption}
                 `;
                 button.addEventListener('click', () => toggleTop5(machine.id));
                 top5CandidateGrid.appendChild(button);
