@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -31,29 +31,7 @@
         body { font-family: 'Noto Sans JP', sans-serif; }
         .focus-ring:focus { outline: 2px solid #C71744; outline-offset: 2px; }
         .card-ui { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04); }
-        .star-btn {
-            width: 2.25rem;
-            height: 2.25rem;
-            color: #d1d5db;
-            font-size: 2rem;
-            line-height: 1;
-            border-radius: 9999px;
-            transition: all 0.2s ease;
-        }
-        .star-btn:active { transform: scale(0.94); }
-        .star-btn.active {
-            color: #f59e0b;
-            text-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
-            transform: translateY(-1px) scale(1.07);
-        }
-        .star-btn.popped {
-            animation: star-pop 220ms ease-out;
-        }
-        @keyframes star-pop {
-            0% { transform: scale(0.85); }
-            60% { transform: scale(1.16); }
-            100% { transform: scale(1.07); }
-        }
+        .wizard-card:active { transform: scale(0.98); }
         .lesson-chip {
             border: 1px solid #e5e7eb;
             border-radius: 0.8rem;
@@ -79,77 +57,91 @@
 
         <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
             <form id="survey-form" class="space-y-6">
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">1. よく利用しているサービスを複数選択してください</h2>
-                    <div id="services-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                </div>
-
-                <div id="dependency-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">2. 各カテゴリーの利用度</h2>
-                    <p class="mt-2 text-sm text-gray-600">★1 = 使わない / ★5 = とてもよく使う</p>
-                    <div id="dependency-grid" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                </div>
-
-                <div id="top5-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">3. あなたのお気に入りマシンをベスト5で教えてください</h2>
-                    <p class="mt-2 text-sm text-gray-600">画像をタップして選択（最大5件）</p>
-                    <div id="top5-selected" class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-2"></div>
-                    <div id="top5-candidate-grid" class="mt-4 grid grid-cols-4 gap-3"></div>
-                </div>
-
-                <div id="lesson-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. スタジオ・ピラティスマシン（リフォーマー）について</h2>
-                    <p class="mt-2 text-sm text-gray-600">該当サービスを選んだ方のみ回答してください</p>
-                    <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-                    <div id="studio-subsection" class="mt-5 hidden">
-                        <h3 class="text-base font-black text-joytext">スタジオを選んだ方</h3>
-                        <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
-                        <div id="studio-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-                        <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
-                        <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
-                    </div>
-                    <div id="pilates-subsection" class="mt-6 hidden">
-                        <h3 class="text-base font-black text-joytext">ピラティスマシン（リフォーマー）を選んだ方</h3>
-                        <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
-                        <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-                        <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
-                        <div id="pilates-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                <div id="usage-wizard-card" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <p id="wizard-step-label" class="text-sm font-bold text-joyred">ステップ 1 / 3</p>
+                    <h2 id="wizard-heading" class="mt-2 text-xl md:text-2xl font-black text-joyred">サービスの利用区分</h2>
+                    <p id="wizard-lead" class="mt-2 text-sm text-gray-600 leading-relaxed"></p>
+                    <div id="wizard-tap-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                    <div id="wizard-never-summary" class="mt-4 hidden rounded-xl border border-joygray bg-gray-50 p-4 text-sm"></div>
+                    <div class="mt-6 flex flex-wrap items-center gap-3">
+                        <button type="button" id="wizard-back-btn" class="rounded-full border-2 border-joygray bg-white px-6 py-2.5 text-sm font-bold text-joytext hover:border-joyred transition">戻る</button>
+                        <button type="button" id="wizard-next-btn" class="rounded-full bg-joyred px-8 py-2.5 text-sm font-black text-white shadow-sm hover:opacity-90 transition">次へ</button>
                     </div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">5. 追加して欲しい内容</h2>
-                    <p class="mt-2 text-sm text-gray-600">スタジオ・レッスン（上の4）とは別枠です。マシン・設備のご希望を全員から募集しています。</p>
-                    <label class="block mt-4">
-                        <span class="text-sm font-bold">追加して欲しいマシン</span>
-                        <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: ハックスクワット、グルートドライブ など"></textarea>
-                    </label>
-                    <label class="block mt-4">
-                        <span class="text-sm font-bold">追加して欲しい設備</span>
-                        <textarea name="wantedOptions" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: サプリメントサーバー、コワーキングスペース など"></textarea>
-                    </label>
+                <div id="usage-summary-bar" class="hidden bg-joypanel border border-joygray rounded-2xl p-4 md:p-5 card-ui">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div>
+                            <p class="text-sm font-black text-joyred">利用区分（完了）</p>
+                            <p id="usage-summary-text" class="mt-1 text-sm text-gray-700 leading-relaxed"></p>
+                        </div>
+                        <button type="button" id="usage-redo-btn" class="shrink-0 rounded-full border-2 border-joyred bg-white px-5 py-2 text-sm font-bold text-joyred hover:bg-red-50 transition">やり直す</button>
+                    </div>
                 </div>
 
-                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">6. その他ご意見</h2>
-                    <textarea name="freeComment" class="focus-ring mt-3 w-full rounded-xl border border-joygray px-4 py-3" rows="4" placeholder="自由にご記入ください"></textarea>
-                </div>
+                <div id="survey-main-sections" class="space-y-6 hidden">
+                    <div id="top5-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
+                        <h2 class="text-xl md:text-2xl font-black text-joyred">2. あなたのお気に入りマシンをベスト5で教えてください</h2>
+                        <p class="mt-2 text-sm text-gray-600">画像をタップして選択（最大5件）</p>
+                        <div id="top5-selected" class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-2"></div>
+                        <div id="top5-candidate-grid" class="mt-4 grid grid-cols-4 gap-3"></div>
+                    </div>
 
-                <div class="flex flex-col md:flex-row gap-3 md:items-center">
-                    <button id="submit-button" type="submit" class="inline-flex justify-center items-center px-8 py-3 rounded-full bg-joyred text-white font-black tracking-wide hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition">
-                        送信する
-                    </button>
-                    <p id="status-text" class="text-sm text-gray-600"></p>
+                    <div id="lesson-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
+                        <h2 class="text-xl md:text-2xl font-black text-joyred">3. スタジオ・ピラティスマシン（リフォーマー）について</h2>
+                        <p class="mt-2 text-sm text-gray-600">該当サービスを選んだ方のみ回答してください</p>
+                        <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                        <div id="studio-subsection" class="mt-5 hidden">
+                            <h3 class="text-base font-black text-joytext">スタジオを選んだ方</h3>
+                            <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
+                            <div id="studio-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                            <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
+                            <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                        </div>
+                        <div id="pilates-subsection" class="mt-6 hidden">
+                            <h3 class="text-base font-black text-joytext">ピラティスマシン（リフォーマー）を選んだ方</h3>
+                            <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
+                            <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                            <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
+                            <div id="pilates-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                        <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加して欲しい内容</h2>
+                        <label class="block mt-4">
+                            <span class="text-sm font-bold">追加して欲しいマシン</span>
+                            <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: ハックスクワット、グルートドライブ など"></textarea>
+                        </label>
+                        <label class="block mt-4">
+                            <span class="text-sm font-bold">追加して欲しい設備</span>
+                            <textarea name="wantedOptions" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: サプリメントサーバー、コワーキングスペース など"></textarea>
+                        </label>
+                    </div>
+
+                    <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                        <h2 class="text-xl md:text-2xl font-black text-joyred">5. その他ご意見</h2>
+                        <textarea name="freeComment" class="focus-ring mt-3 w-full rounded-xl border border-joygray px-4 py-3" rows="4" placeholder="自由にご記入ください"></textarea>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-3 md:items-center">
+                        <button id="submit-button" type="submit" class="inline-flex justify-center items-center px-8 py-3 rounded-full bg-joyred text-white font-black tracking-wide hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition">
+                            送信する
+                        </button>
+                        <p id="status-text" class="text-sm text-gray-600"></p>
+                    </div>
                 </div>
             </form>
         </section>
     </main>
 
+    <script src="service-images-embedded.js" charset="utf-8"></script>
     <script>
         const services = [
             'FWエリア',
             'マシンエリア',
             '有酸素エリア',
+            'ストレッチエリア',
             'サウナ',
             'ミストサウナ',
             'スタジオ',
@@ -157,17 +149,13 @@
             'エステ',
             'タンニング'
         ];
-        const serviceImages = {
-            'FWエリア': '20.png',
-            'マシンエリア': '19.png',
-            '有酸素エリア': '18.png',
-            'サウナ': '23.png',
-            'ミストサウナ': '23.png',
-            'スタジオ': '17.png',
-            'ピラティスマシン（リフォーマー）': '16.png',
-            'エステ': '21.png',
-            'タンニング': '22.png'
-        };
+
+        function getServiceImageSrc(service) {
+            if (typeof SERVICE_IMAGE_DATA_URLS !== 'undefined' && SERVICE_IMAGE_DATA_URLS[service]) {
+                return SERVICE_IMAGE_DATA_URLS[service];
+            }
+            return '';
+        }
 
         const gymData = [
             { id: 'cardio', title: '有酸素マシン', items: [{ imgBase: 'cardio_1' }, { imgBase: 'cardio_2' }, { imgBase: 'cardio_3' }] },
@@ -182,8 +170,6 @@
                 { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
             ] }
         ];
-        // BEST5表示名。レジスタンスは写真が似ている機種があるため（例: アダクター/アブダクター）ターゲット部位を併記。
-        // ※ resistance_N の機種名・並びは店舗の実機写真順に合わせて差し替えてください。
         const machineDisplayNames = {
             cardio_1: 'トレッドミル',
             cardio_2: 'クロストレーナー',
@@ -206,12 +192,8 @@
             resistance_15: 'バックエクステンション（腰裏・脊柱起立筋）'
         };
 
-        // Google Apps Script WebアプリURLに差し替えてください
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
-        const servicesGrid = document.getElementById('services-grid');
-        const dependencySection = document.getElementById('dependency-section');
-        const dependencyGrid = document.getElementById('dependency-grid');
         const top5Section = document.getElementById('top5-section');
         const lessonSection = document.getElementById('lesson-section');
         const weekdayGrid = document.getElementById('weekday-grid');
@@ -226,6 +208,19 @@
         const form = document.getElementById('survey-form');
         const statusText = document.getElementById('status-text');
         const submitButton = document.getElementById('submit-button');
+        const surveyMainSections = document.getElementById('survey-main-sections');
+        const usageWizardCard = document.getElementById('usage-wizard-card');
+        const usageSummaryBar = document.getElementById('usage-summary-bar');
+        const usageSummaryText = document.getElementById('usage-summary-text');
+        const wizardStepLabel = document.getElementById('wizard-step-label');
+        const wizardHeading = document.getElementById('wizard-heading');
+        const wizardLead = document.getElementById('wizard-lead');
+        const wizardTapGrid = document.getElementById('wizard-tap-grid');
+        const wizardNeverSummary = document.getElementById('wizard-never-summary');
+        const wizardBackBtn = document.getElementById('wizard-back-btn');
+        const wizardNextBtn = document.getElementById('wizard-next-btn');
+        const usageRedoBtn = document.getElementById('usage-redo-btn');
+
         const top5Selection = [];
         const allMachineCandidates = gymData.flatMap((area) =>
             area.items.map((item) => ({
@@ -235,7 +230,6 @@
                 area: area.title
             }))
         );
-        const dependencyState = Object.fromEntries(services.map((service) => [service, 3]));
         const coreMachineServices = ['FWエリア', 'マシンエリア', '有酸素エリア'];
         const studioServices = ['スタジオ', 'ピラティスマシン（リフォーマー）'];
         const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
@@ -291,66 +285,143 @@
         const pilatesInstructors = ['YUKI', 'Hana', 'みと'];
         const studioInstructors = [...new Set(lessonSchedule.filter((x) => x.area === 'ホットスタジオ').map((x) => x.instructor))];
 
-        function createServiceCheckboxes() {
-            services.forEach((service) => {
-                const label = document.createElement('label');
-                label.className = 'block bg-white border border-joygray rounded-xl p-2 hover:border-joyred transition';
-                const maybeImage = serviceImages[service]
-                    ? `
-                        <div class="rounded-lg overflow-hidden bg-gray-50 mb-2 h-36 md:h-44 flex items-center justify-center">
-                            <img src="${serviceImages[service]}" alt="${service}" class="w-full h-full object-contain"
-                                 loading="lazy"
-                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
-                        </div>
-                    `
-                    : '';
-                label.innerHTML = `
-                    ${maybeImage}
-                    <div class="flex items-center gap-2">
-                        <input class="service-checkbox accent-joyred w-4 h-4" type="checkbox" name="serviceUsage" value="${service}">
-                        <span class="text-sm font-bold">${service}</span>
-                    </div>
-                `;
-                servicesGrid.appendChild(label);
+        let wizardStep = 1;
+        const pickAlways = new Set();
+        const pickSometimes = new Set();
+        let wizardFinished = false;
+
+        function buildUsageByService() {
+            const o = {};
+            services.forEach((s) => {
+                if (pickAlways.has(s)) o[s] = 100;
+                else if (pickSometimes.has(s)) o[s] = 50;
+                else o[s] = 0;
             });
+            return o;
         }
 
-        function createDependencyInputs() {
-            services.forEach((service) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'block bg-white border border-joygray rounded-xl px-3 py-3';
-                wrapper.dataset.service = service;
-                const stars = [1, 2, 3, 4, 5]
-                    .map((n) => `<button type="button" data-service="${service}" data-star="${n}" class="star-btn text-2xl leading-none px-0.5 ${n <= dependencyState[service] ? 'active' : ''}">★</button>`)
-                    .join('');
-                wrapper.innerHTML = `
-                    <div class="flex items-center justify-between gap-3">
-                        <span class="text-sm font-bold">${service}</span>
-                        <div class="flex items-center">${stars}</div>
-                    </div>
-                `;
-                dependencyGrid.appendChild(wrapper);
-            });
-            dependencyGrid.querySelectorAll('.star-btn').forEach((button) => {
-                button.addEventListener('click', () => {
-                    const service = button.dataset.service;
-                    const star = Number(button.dataset.star);
-                    dependencyState[service] = star;
-                    refreshStarUi(service);
-                    button.classList.remove('popped');
-                    void button.offsetWidth;
-                    button.classList.add('popped');
+        function getActiveServices() {
+            if (!wizardFinished) return [];
+            const u = buildUsageByService();
+            return services.filter((s) => u[s] === 100 || u[s] === 50);
+        }
+
+        function servicesForTapStep() {
+            if (wizardStep === 1) return services.slice();
+            if (wizardStep === 2) return services.filter((s) => !pickAlways.has(s));
+            return [];
+        }
+
+        function renderTapGrid(activeSet) {
+            wizardTapGrid.innerHTML = '';
+            const list = servicesForTapStep();
+            list.forEach((service) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.service = service;
+                const imgSrc = getServiceImageSrc(service);
+                const selected = activeSet.has(service);
+                btn.className = `wizard-card block w-full text-left border rounded-xl p-2 transition ${
+                    selected ? 'border-joyred bg-red-50 ring-2 ring-red-200' : 'border-joygray bg-white hover:border-joyred'
+                }`;
+                const imgHtml = imgSrc
+                    ? `<div class="rounded-lg overflow-hidden bg-gray-50 mb-2 h-36 md:h-44 flex items-center justify-center"><img src="${imgSrc}" alt="" class="w-full h-full object-contain" loading="lazy"></div>`
+                    : `<div class="rounded-lg bg-gray-100 mb-2 h-36 md:h-44 flex items-center justify-center text-xs text-gray-400">画像なし</div>`;
+                btn.innerHTML = `${imgHtml}<span class="text-sm font-bold">${service}</span>`;
+                btn.addEventListener('click', () => {
+                    if (activeSet.has(service)) activeSet.delete(service);
+                    else activeSet.add(service);
+                    renderTapGrid(activeSet);
                 });
+                wizardTapGrid.appendChild(btn);
             });
         }
 
-        function refreshStarUi(service) {
-            const current = dependencyState[service];
-            dependencyGrid.querySelectorAll(`.star-btn[data-service="${service}"]`).forEach((btn) => {
-                const val = Number(btn.dataset.star);
-                btn.classList.toggle('active', val <= current);
-            });
+        function renderWizard() {
+            if (wizardFinished) return;
+            wizardStepLabel.textContent = `ステップ ${wizardStep} / 3`;
+            wizardNeverSummary.classList.add('hidden');
+            wizardTapGrid.classList.remove('hidden');
+            if (wizardStep === 1) {
+                wizardHeading.textContent = 'いつも利用しているサービスを選択してください';
+                wizardLead.textContent =
+                    '必ず利用するもの（＝100％）にあたるサービスをタップで選んでください（複数可）。当てはまるものがなければそのまま「次へ」へ進んでください。';
+                renderTapGrid(pickAlways);
+            } else if (wizardStep === 2) {
+                wizardHeading.textContent = 'たまに利用するサービスを選択してください';
+                wizardLead.textContent =
+                    'たまにしか使わないもの（＝50％）をタップで選んでください（複数可）。ステップ1で選んだサービスは表示されません。該当がなければそのまま「次へ」へ。';
+                renderTapGrid(pickSometimes);
+            } else {
+                wizardHeading.textContent = '利用しないサービス（0％）の確認';
+                wizardLead.textContent =
+                    'ここまで選ばれなかったサービスは「全く利用しない（0％）」として記録されます。リニューアル時の優先度整理に使えます。内容をご確認のうえ進んでください。';
+                wizardTapGrid.classList.add('hidden');
+                wizardNeverSummary.classList.remove('hidden');
+                const never = services.filter((s) => !pickAlways.has(s) && !pickSometimes.has(s));
+                if (never.length === 0) {
+                    wizardNeverSummary.innerHTML =
+                        '<p class="font-bold text-gray-800">すべてのサービスがステップ1または2で選択されています（0％の項目はありません）。</p>';
+                } else {
+                    wizardNeverSummary.innerHTML =
+                        '<p class="mb-2 font-bold text-gray-800">次のサービスは「利用しない（0％）」に分類されます。</p><ul class="list-disc pl-5 space-y-1 text-gray-700">' +
+                        never.map((s) => `<li>${s}</li>`).join('') +
+                        '</ul>';
+                }
+            }
+            wizardBackBtn.classList.toggle('invisible', wizardStep === 1);
+            wizardNextBtn.textContent = wizardStep === 3 ? '次へ（アンケート本編を表示）' : '次へ';
         }
+
+        function finishWizard() {
+            wizardFinished = true;
+            usageWizardCard.classList.add('hidden');
+            const u = buildUsageByService();
+            const n100 = services.filter((s) => u[s] === 100).length;
+            const n50 = services.filter((s) => u[s] === 50).length;
+            const n0 = services.filter((s) => u[s] === 0).length;
+            usageSummaryText.textContent = `100％（必ず）: ${n100}件 ／ 50％（たまに）: ${n50}件 ／ 0％（利用しない）: ${n0}件`;
+            usageSummaryBar.classList.remove('hidden');
+            surveyMainSections.classList.remove('hidden');
+            updateConditionalSections();
+        }
+
+        function resetWizard() {
+            wizardFinished = false;
+            wizardStep = 1;
+            pickAlways.clear();
+            pickSometimes.clear();
+            usageWizardCard.classList.remove('hidden');
+            usageSummaryBar.classList.add('hidden');
+            surveyMainSections.classList.add('hidden');
+            top5Selection.length = 0;
+            renderTop5Selected();
+            renderTop5Candidates();
+            renderWizard();
+        }
+
+        wizardNextBtn.addEventListener('click', () => {
+            if (wizardFinished) return;
+            if (wizardStep < 3) {
+                wizardStep += 1;
+                renderWizard();
+            } else {
+                finishWizard();
+            }
+        });
+
+        wizardBackBtn.addEventListener('click', () => {
+            if (wizardFinished) return;
+            if (wizardStep > 1) {
+                wizardStep -= 1;
+                if (wizardStep === 1) pickSometimes.clear();
+                renderWizard();
+            }
+        });
+
+        usageRedoBtn.addEventListener('click', () => {
+            resetWizard();
+        });
 
         function createWeekdayCheckboxes() {
             weekdays.forEach((day) => {
@@ -396,25 +467,19 @@
         }
 
         function updateConditionalSections() {
-            const selectedServices = Array.from(document.querySelectorAll('.service-checkbox:checked')).map((el) => el.value);
+            const selectedServices = getActiveServices();
             const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
             const showLesson = selectedServices.some((item) => studioServices.includes(item));
             const showStudio = selectedServices.includes('スタジオ');
             const showPilates = selectedServices.includes('ピラティスマシン（リフォーマー）');
-            const showDependency = selectedServices.length > 0;
             const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
             const filteredByDay = selectedDays.length
                 ? lessonSchedule.filter((x) => selectedDays.includes(x.day))
                 : lessonSchedule;
             const studioLessons = filteredByDay.filter((x) => x.area === 'ホットスタジオ');
             const pilatesLessons = filteredByDay.filter((x) => x.area === 'ピラティスルーム');
-            dependencySection.classList.toggle('hidden', !showDependency);
-            dependencyGrid.querySelectorAll('[data-service]').forEach((card) => {
-                const shouldShow = selectedServices.includes(card.dataset.service);
-                card.classList.toggle('hidden', !shouldShow);
-            });
-            top5Section.classList.toggle('hidden', !showTop5);
-            lessonSection.classList.toggle('hidden', !showLesson);
+            top5Section.classList.toggle('hidden', !showTop5 || !wizardFinished);
+            lessonSection.classList.toggle('hidden', !showLesson || !wizardFinished);
             studioSubsection.classList.toggle('hidden', !showStudio);
             pilatesSubsection.classList.toggle('hidden', !showPilates);
             if (showStudio) createLessonCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
@@ -477,7 +542,6 @@
             if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL') {
                 return { ok: false, reason: 'missing_endpoint' };
             }
-
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -493,8 +557,15 @@
             event.preventDefault();
             statusText.textContent = '';
 
+            if (!wizardFinished) {
+                statusText.textContent = '先にステップ1〜3でサービスの利用区分を完了してください。';
+                statusText.className = 'text-sm text-red-600';
+                return;
+            }
+
             const formData = new FormData(form);
-            const serviceUsage = formData.getAll('serviceUsage');
+            const usageByService = buildUsageByService();
+            const serviceUsage = services.filter((s) => usageByService[s] === 100 || usageByService[s] === 50);
             const top5 = top5Selection.map((m) => m.label);
             const showTop5 = serviceUsage.some((item) => coreMachineServices.includes(item));
 
@@ -507,12 +578,10 @@
             submitButton.disabled = true;
             submitButton.textContent = '送信中...';
 
-            const dependency = { ...dependencyState };
-
             const payload = {
                 submittedAt: new Date().toISOString(),
                 serviceUsage,
-                dependency,
+                dependency: usageByService,
                 top5: showTop5 ? top5 : [],
                 lessonWeekdays: formData.getAll('lessonWeekdays'),
                 studioFavoriteLessons: formData.getAll('studioFavoriteLessons'),
@@ -531,10 +600,9 @@
                 statusText.className = 'text-sm text-green-700';
                 form.reset();
                 top5Selection.length = 0;
-                services.forEach((service) => { dependencyState[service] = 3; refreshStarUi(service); });
                 renderTop5Selected();
                 renderTop5Candidates();
-                updateConditionalSections();
+                resetWizard();
             } else if (result.reason === 'missing_endpoint') {
                 statusText.textContent = '送信先URL未設定のため、ローカル保存しました。';
                 statusText.className = 'text-sm text-amber-700';
@@ -548,20 +616,15 @@
             submitButton.textContent = '送信する';
         });
 
-        createServiceCheckboxes();
-        createDependencyInputs();
         createWeekdayCheckboxes();
         createOptionCheckboxGrid(studioInstructorGrid, 'studioFavoriteInstructors', studioInstructors);
         createOptionCheckboxGrid(pilatesInstructorGrid, 'pilatesFavoriteInstructors', pilatesInstructors);
         renderTop5Selected();
         renderTop5Candidates();
-        document.querySelectorAll('.service-checkbox').forEach((checkbox) => {
-            checkbox.addEventListener('change', updateConditionalSections);
-        });
         document.querySelectorAll('input[name="lessonWeekdays"]').forEach((checkbox) => {
             checkbox.addEventListener('change', updateConditionalSections);
         });
-        updateConditionalSections();
+        renderWizard();
     </script>
 </body>
 </html>
