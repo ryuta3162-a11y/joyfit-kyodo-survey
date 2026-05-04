@@ -98,7 +98,7 @@
                 </div>
 
                 <div id="lesson-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. スタジオ・ピラティスについて</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. スタジオ・ピラティスマシン（リフォーマー）について</h2>
                     <p class="mt-2 text-sm text-gray-600">該当サービスを選んだ方のみ回答してください</p>
                     <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                     <div id="studio-subsection" class="mt-5 hidden">
@@ -109,7 +109,7 @@
                         <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
                     </div>
                     <div id="pilates-subsection" class="mt-6 hidden">
-                        <h3 class="text-base font-black text-joytext">ピラティスを選んだ方</h3>
+                        <h3 class="text-base font-black text-joytext">ピラティスマシン（リフォーマー）を選んだ方</h3>
                         <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
                         <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
                         <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
@@ -118,7 +118,8 @@
                 </div>
 
                 <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">4. 追加して欲しい内容</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">5. 追加して欲しい内容</h2>
+                    <p class="mt-2 text-sm text-gray-600">スタジオ・レッスン（上の4）とは別枠です。マシン・設備のご希望を全員から募集しています。</p>
                     <label class="block mt-4">
                         <span class="text-sm font-bold">追加して欲しいマシン</span>
                         <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="例: ハックスクワット、グルートドライブ など"></textarea>
@@ -130,7 +131,7 @@
                 </div>
 
                 <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
-                    <h2 class="text-xl md:text-2xl font-black text-joyred">5. その他ご意見</h2>
+                    <h2 class="text-xl md:text-2xl font-black text-joyred">6. その他ご意見</h2>
                     <textarea name="freeComment" class="focus-ring mt-3 w-full rounded-xl border border-joygray px-4 py-3" rows="4" placeholder="自由にご記入ください"></textarea>
                 </div>
 
@@ -150,8 +151,9 @@
             'マシンエリア',
             '有酸素エリア',
             'サウナ',
+            'ミストサウナ',
             'スタジオ',
-            'ピラティス',
+            'ピラティスマシン（リフォーマー）',
             'エステ',
             'タンニング'
         ];
@@ -160,8 +162,9 @@
             'マシンエリア': '19.png',
             '有酸素エリア': '18.png',
             'サウナ': '23.png',
+            'ミストサウナ': '23.png',
             'スタジオ': '17.png',
-            'ピラティス': '16.png',
+            'ピラティスマシン（リフォーマー）': '16.png',
             'エステ': '21.png',
             'タンニング': '22.png'
         };
@@ -179,13 +182,28 @@
                 { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
             ] }
         ];
-        // BEST5で表示するマシン名。内部ID(resistance_2等)はUIに出さない。
+        // BEST5表示名。レジスタンスは写真が似ている機種があるため（例: アダクター/アブダクター）ターゲット部位を併記。
+        // ※ resistance_N の機種名・並びは店舗の実機写真順に合わせて差し替えてください。
         const machineDisplayNames = {
             cardio_1: 'トレッドミル',
             cardio_2: 'クロストレーナー',
             cardio_3: 'エアロバイク（リカンベント含む）',
             freeweight_1: 'パワーラック',
-            resistance_1: 'レッグプレス'
+            resistance_1: 'レッグプレス（脚全体・もも前・お尻）',
+            resistance_2: 'レッグエクステンション（もも前・大腿四頭筋）',
+            resistance_3: 'レッグカール（太もも裏・ハムストリング）',
+            resistance_4: 'アダクター（内もも）',
+            resistance_5: 'アブダクター（外もも・お尻）',
+            resistance_6: 'ヒップ＆グルート（お尻・ハムストリング）',
+            resistance_7: 'ラットプルダウン（広背筋・背中）',
+            resistance_8: 'シーテッドロー（背中・僧帽筋）',
+            resistance_9: 'リアデルト（肩裏・三角筋後部）',
+            resistance_10: 'チェストプレス（大胸筋）',
+            resistance_11: 'ショルダープレス（肩・三角筋）',
+            resistance_12: 'バイセップカール（上腕二頭筋）',
+            resistance_13: 'トライセップ（上腕三頭筋）',
+            resistance_14: 'アブドミナル（腹筋）',
+            resistance_15: 'バックエクステンション（腰裏・脊柱起立筋）'
         };
 
         // Google Apps Script WebアプリURLに差し替えてください
@@ -219,7 +237,7 @@
         );
         const dependencyState = Object.fromEntries(services.map((service) => [service, 3]));
         const coreMachineServices = ['FWエリア', 'マシンエリア', '有酸素エリア'];
-        const studioServices = ['スタジオ', 'ピラティス'];
+        const studioServices = ['スタジオ', 'ピラティスマシン（リフォーマー）'];
         const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
         const lessonSchedule = [
             { day: '月', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'ハタヨガ', star: '★', instructor: '菊池 智子' },
@@ -382,7 +400,7 @@
             const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
             const showLesson = selectedServices.some((item) => studioServices.includes(item));
             const showStudio = selectedServices.includes('スタジオ');
-            const showPilates = selectedServices.includes('ピラティス');
+            const showPilates = selectedServices.includes('ピラティスマシン（リフォーマー）');
             const showDependency = selectedServices.length > 0;
             const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
             const filteredByDay = selectedDays.length
@@ -415,7 +433,7 @@
                 const box = document.createElement('div');
                 box.className = 'border border-joygray rounded-xl bg-white p-2 min-h-[52px] flex items-center';
                 box.innerHTML = selected
-                    ? `<div class="text-sm"><span class="font-black text-joyred mr-1">${i + 1}位</span><span>選択済み</span></div>`
+                    ? `<div class="text-xs md:text-sm leading-snug"><span class="font-black text-joyred mr-1">${i + 1}位</span><span>${selected.label || '選択済み'}</span></div>`
                     : `<div class="text-sm text-gray-400"><span class="font-black mr-1">${i + 1}位</span>未選択</div>`;
                 top5Selected.appendChild(box);
             }
@@ -441,10 +459,14 @@
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = `relative border rounded-lg overflow-hidden bg-white p-1 transition ${isSelected ? 'border-joyred ring-2 ring-red-200' : 'border-joygray hover:border-joyred'}`;
+                const caption = machine.label
+                    ? `<p class="mt-1 px-0.5 text-[10px] md:text-[11px] leading-snug text-center text-gray-700 line-clamp-3">${machine.label}</p>`
+                    : '';
                 button.innerHTML = `
                     ${isSelected ? `<span class="absolute top-1 left-1 z-10 text-[10px] px-1.5 py-0.5 bg-joyred text-white rounded-full font-black">${rank}位</span>` : ''}
                     <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain"
                          onerror="this.onerror=null;this.src='https://placehold.co/120x120/f4f4f5/888888?text=No+Image';">
+                    ${caption}
                 `;
                 button.addEventListener('click', () => toggleTop5(machine.id));
                 top5CandidateGrid.appendChild(button);
