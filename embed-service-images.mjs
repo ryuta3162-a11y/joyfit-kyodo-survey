@@ -10,13 +10,14 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = __dirname;
 
+// ファイル番号: 18=FW / 19=マシン / 20=有酸素（従来の割当を修正）
 const mapping = [
-    ['FWエリア', '20.png'],
+    ['FWエリア', '18.png'],
     ['マシンエリア', '19.png'],
-    ['有酸素エリア', '18.png'],
+    ['有酸素エリア', '20.png'],
     ['ストレッチエリア', 'stretch_area.png'],
     ['サウナ', '23.png'],
-    ['ミストサウナ', '23.png'],
+    ['ミストサウナ', 'mist_sauna.png'],
     ['スタジオ', '17.png'],
     ['ピラティスマシン（リフォーマー）', '16.png'],
     ['エステ', '21.png'],
