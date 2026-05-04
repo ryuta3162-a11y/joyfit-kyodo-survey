@@ -54,8 +54,8 @@ function getResponseHeaders_() {
       'スタジオ・お気に入りインストラクター',
       'ピラティス・お気に入りレッスン',
       'ピラティス・お気に入りインストラクター',
-      '追加して欲しいマシン',
-      '追加して欲しい設備',
+      'ご希望のマシン',
+      'ご希望の設備・環境',
       'その他ご意見'
     ]
   );
@@ -176,9 +176,20 @@ var DASH_KEYS = {
   si: 'スタジオ・お気に入りインストラクター',
   pl: 'ピラティス・お気に入りレッスン',
   pi: 'ピラティス・お気に入りインストラクター',
-  wm: '追加して欲しいマシン',
-  wo: '追加して欲しい設備'
+  wm: 'ご希望のマシン',
+  wo: 'ご希望の設備・環境',
+  wmLegacy: '追加して欲しいマシン',
+  woLegacy: '追加して欲しい設備'
 };
+
+/** 列見出しリネーム前のシートでも集計できるよう、新見出し優先でセル値を取得 */
+function cellOrLegacy_(row, primary, legacy) {
+  var p = row[primary];
+  if (p !== undefined && p !== null && String(p).trim() !== '') return String(p);
+  if (!legacy) return '';
+  var l = row[legacy];
+  return l !== undefined && l !== null ? String(l) : '';
+}
 
 function getSheetRowsAsObjects_() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -296,8 +307,8 @@ function getDashboardData() {
     bumpMap_(studioInst, splitCommaOrJa_(row[K.si]));
     bumpMap_(pilatesInst, splitCommaOrJa_(row[K.pi]));
 
-    countLinesInColumn_(wantedMach, row[K.wm]);
-    countLinesInColumn_(wantedOpt, row[K.wo]);
+    countLinesInColumn_(wantedMach, cellOrLegacy_(row, K.wm, K.wmLegacy));
+    countLinesInColumn_(wantedOpt, cellOrLegacy_(row, K.wo, K.woLegacy));
   });
 
   const maxRank = 20;
