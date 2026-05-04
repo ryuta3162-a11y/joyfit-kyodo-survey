@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOYFIT24 経堂｜アンケート集計</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --joy: #C71744;
+      --bg: #f1f5f9;
+      --card: #fff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --c100: #15803d;
+      --c50: #b45309;
+      --c0: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--card);
+      border-bottom: 6px solid var(--joy);
+      padding: 1rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--joy);
+    }
+    header p { margin: .4rem 0 0; font-size: .82rem; color: var(--muted); max-width: 42rem; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-items: center;
+      margin-top: .75rem;
+    }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: .45rem 1rem;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: .8rem;
+      cursor: pointer;
+      background: var(--joy);
+      color: #fff;
+    }
+    .btn:hover { opacity: .92; }
+    .btn-secondary {
+      background: #fff;
+      color: var(--joy);
+      border: 2px solid var(--joy);
+    }
+    .kpi {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .35rem;
+      margin-left: auto;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+    .kpi strong { font-size: 1.35rem; color: var(--joy); font-weight: 900; }
+    main { max-width: 960px; margin: 0 auto; padding: 1rem 1rem 2.5rem; }
+    .alert {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: .75rem 1rem;
+      border-radius: .75rem;
+      font-size: .85rem;
+      margin-bottom: 1rem;
+    }
+    .note {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding: .65rem .85rem;
+      background: #e0f2fe;
+      border-radius: .5rem;
+      border: 1px solid #bae6fd;
+    }
+    .grid-3 {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (min-width: 800px) {
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    .card {
+      background: var(--card);
+      border-radius: 1rem;
+      border: 1px solid var(--line);
+      padding: 1rem 1.05rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,.04);
+    }
+    .card h2 {
+      margin: 0 0 .15rem;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .card .sub {
+      margin: 0 0 .75rem;
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .card.u100 h2 { color: var(--c100); }
+    .card.u50 h2 { color: var(--c50); }
+    .card.u0 h2 { color: var(--c0); }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr minmax(2.5rem, auto);
+      gap: .35rem .6rem;
+      align-items: center;
+      font-size: .76rem;
+      margin-bottom: .45rem;
+    }
+    .row .name { word-break: break-word; }
+    .row .n { text-align: right; font-weight: 800; color: var(--joy); font-variant-numeric: tabular-nums; }
+    .bar {
+      grid-column: 1 / -1;
+      height: 6px;
+      background: #f1f5f9;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      border-radius: 99px;
+      background: var(--joy);
+      opacity: .85;
+    }
+    .card.u100 .bar > i { background: var(--c100); }
+    .card.u50 .bar > i { background: var(--c50); }
+    .card.u0 .bar > i { background: #94a3b8; }
+    .empty { font-size: .78rem; color: var(--muted); margin: 0; }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--joy);
+      margin: 1.5rem 0 .6rem;
+      padding-bottom: .35rem;
+      border-bottom: 2px solid var(--line);
+    }
+    .loading { text-align: center; padding: 2rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JOYFIT24 経堂｜アンケート集計ダッシュボード</h1>
+    <p>全回答をまとめて集計しています。どのサービスが「必ず／たまに／使わない」と多いか、マシンBEST5の人気、レッスン・ご希望の傾向を一覧できます。</p>
+    <div class="toolbar">
+      <button type="button" class="btn" id="btn-refresh">再集計</button>
+      <a class="btn btn-secondary" id="link-sheet" href="#" target="_blank" rel="noopener">スプレッドシート</a>
+      <div class="kpi">回答数 <strong id="kpi-n">—</strong> 件</div>
+    </div>
+  </header>
+  <main>
+    <p class="note">「使わない（0％）」が多いサービス＝リニューアル時に優先度を下げられる候補の参考になります。BEST5は全回答の1〜5位を合算した「指名回数」です。</p>
+    <div id="msg"></div>
+    <div id="app" class="loading">集計中…</div>
+  </main>
+
+  <script>
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function rankedBlock(title, subtitle, items, variant, maxCount) {
+      if (!items || !items.length) {
+        return '<div class="card ' + variant + '"><h2>' + escapeHtml(title) + '</h2><p class="sub">' + escapeHtml(subtitle) + '</p><p class="empty">該当データなし</p></div>';
+      }
+      const mc = maxCount || items[0].count || 1;
+      const rows = items.map(function (it) {
+        const pct = Math.round((it.count / mc) * 100);
+        return (
+          '<div class="row">' +
+            '<span class="name">' + escapeHtml(it.name) + '</span>' +
+            '<span class="n">' + it.count + '</span>' +
+            '<div class="bar"><i style="width:' + pct + '%"></i></div>' +
+          '</div>'
+        );
+      }).join('');
+      return (
+        '<div class="card ' + variant + '">' +
+          '<h2>' + escapeHtml(title) + '</h2>' +
+          '<p class="sub">' + escapeHtml(subtitle) + '</p>' +
+          rows +
+        '</div>'
+      );
+    }
+
+    function fullWidthSection(title, subtitle, items) {
+      if (!items || !items.length) {
+        return '<h3 class="section-title">' + escapeHtml(title) + '</h3><div class="card"><p class="empty">該当データなし</p></div>';
+      }
+      const mc = items[0].count || 1;
+      const inner = items.map(function (it) {
+        const pct = Math.round((it.count / mc) * 100);
+        return (
+          '<div class="row">' +
+            '<span class="name">' + escapeHtml(it.name) + '</span>' +
+            '<span class="n">' + it.count + '</span>' +
+            '<div class="bar"><i style="width:' + pct + '%"></i></div>' +
+          '</div>'
+        );
+      }).join('');
+      return (
+        '<h3 class="section-title">' + escapeHtml(title) + '</h3>' +
+        '<div class="card"><p class="sub">' + escapeHtml(subtitle) + '</p>' + inner + '</div>'
+      );
+    }
+
+    function render(data) {
+      const msg = document.getElementById('msg');
+      const app = document.getElementById('app');
+      const kpi = document.getElementById('kpi-n');
+      const link = document.getElementById('link-sheet');
+
+      msg.innerHTML = '';
+      if (!data.ok) {
+        app.className = '';
+        app.innerHTML = '';
+        msg.innerHTML = '<div class="alert">' + escapeHtml(data.error || '読み込みに失敗しました') + '</div>';
+        return;
+      }
+
+      if (data.sheetUrl) link.href = data.sheetUrl;
+      kpi.textContent = String(data.responseCount != null ? data.responseCount : 0);
+
+      const n100 = maxCount_(data.usage100);
+      const n50 = maxCount_(data.usage50);
+      const n0 = maxCount_(data.usage0);
+
+      app.className = '';
+      app.innerHTML =
+        '<div class="grid-3">' +
+          rankedBlock('必ず利用（100％）', '「必ず」と答えた人数が多いサービス', data.usage100 || [], 'u100', n100) +
+          rankedBlock('たまに利用（50％）', '「たまに」と答えた人数が多いサービス', data.usage50 || [], 'u50', n50) +
+          rankedBlock('利用しない（0％）', '「使わない」と答えた人数が多いサービス（不要度の参考）', data.usage0 || [], 'u0', n0) +
+        '</div>' +
+        fullWidthSection('マシン BEST5（人気）', '1〜5位のマシン名を全回答から合算（同じマシンへの複数指名もカウント）', data.best5Machines || []) +
+        fullWidthSection('スタジオ・お気に入りレッスン', '回答に含まれたレッスン行ごとの集計', data.studioLessons || []) +
+        fullWidthSection('ピラティス・お気に入りレッスン', '回答に含まれたレッスン行ごとの集計', data.pilatesLessons || []) +
+        fullWidthSection('スタジオ・お気に入りインストラクター', '指名回数の目安', data.studioInstructors || []) +
+        fullWidthSection('ピラティス・お気に入りインストラクター', '指名回数の目安', data.pilatesInstructors || []) +
+        fullWidthSection('追加して欲しいマシン（自由記述・行単位）', '改行で分けた行ごとの出現回数', data.wantedMachines || []) +
+        fullWidthSection('追加して欲しい設備（自由記述・行単位）', '改行で分けた行ごとの出現回数', data.wantedOptions || []);
+    }
+
+    function maxCount_(items) {
+      if (!items || !items.length) return 1;
+      return items[0].count || 1;
+    }
+
+    function load() {
+      document.getElementById('app').className = 'loading';
+      document.getElementById('app').textContent = '集計中…';
+      google.script.run
+        .withSuccessHandler(render)
+        .withFailureHandler(function (err) {
+          render({ ok: false, error: String(err && err.message ? err.message : err) });
+        })
+        .getDashboardData();
+    }
+
+    document.getElementById('btn-refresh').addEventListener('click', load);
+    window.addEventListener('load', load);
+  </script>
+</body>
+</html>
