@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOYFIT24 経堂 - 会員アンケート</title>
+    <title>JOYFIT24 経堂 - 会員様アンケート</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -47,11 +47,7 @@
         <section class="relative w-full bg-joypanel border-b-[8px] border-joyred shadow-sm">
             <div class="max-w-5xl mx-auto px-4 py-10 md:py-16 text-center">
                 <p class="font-black text-joyred tracking-[0.2em] text-sm md:text-base">JOYFIT24 経堂</p>
-                <h1 class="mt-3 text-3xl md:text-5xl font-black tracking-wide">アンケートのご協力をお願いします</h1>
-                <p class="mt-4 text-sm md:text-base text-gray-600 leading-relaxed">
-                    いつもご利用ありがとうございます。<br>
-                    今後のマシン導入・設備改善・サービス向上のため、率直なご意見をお聞かせください。
-                </p>
+                <h1 class="mt-3 text-3xl md:text-5xl font-black tracking-wide">会員様アンケート</h1>
             </div>
         </section>
 
@@ -60,7 +56,6 @@
                 <div id="usage-wizard-card" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
                     <p id="wizard-step-label" class="text-sm font-bold text-joyred">ステップ 1 / 3</p>
                     <h2 id="wizard-heading" class="mt-2 text-xl md:text-2xl font-black text-joyred">サービスの利用区分</h2>
-                    <p id="wizard-lead" class="mt-2 text-sm text-gray-600 leading-relaxed"></p>
                     <div id="wizard-tap-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                     <div id="wizard-never-summary" class="mt-4 hidden rounded-xl border border-joygray bg-gray-50 p-4 text-sm"></div>
                     <div class="mt-6 flex flex-wrap items-center gap-3">
@@ -70,12 +65,12 @@
                 </div>
 
                 <div id="usage-summary-bar" class="hidden bg-joypanel border border-joygray rounded-2xl p-4 md:p-5 card-ui">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                        <div>
-                            <p class="text-sm font-black text-joyred">利用区分（完了）</p>
-                            <p id="usage-summary-text" class="mt-1 text-sm text-gray-700 leading-relaxed"></p>
-                        </div>
-                        <button type="button" id="usage-redo-btn" class="shrink-0 rounded-full border-2 border-joyred bg-white px-5 py-2 text-sm font-bold text-joyred hover:bg-red-50 transition">やり直す</button>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <p class="text-sm font-black text-joyred">利用区分（完了）</p>
+                        <button type="button" id="usage-redo-btn" class="inline-flex items-center gap-2 rounded-md border border-gray-400 bg-gray-200 px-3 py-2 text-sm font-bold text-gray-800 shadow-sm hover:bg-gray-300 active:bg-gray-400 transition" title="最初からやり直す">
+                            <span class="select-none text-lg leading-none" aria-hidden="true">⌫</span>
+                            <span>やり直す</span>
+                        </button>
                     </div>
                 </div>
 
@@ -93,17 +88,21 @@
                         <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                         <div id="studio-subsection" class="mt-5 hidden">
                             <h3 class="text-base font-black text-joytext">スタジオを選んだ方</h3>
-                            <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
-                            <div id="studio-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-                            <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
-                            <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            <div id="studio-detail" class="hidden mt-3">
+                                <p class="text-sm font-bold text-gray-800">レッスン</p>
+                                <div id="studio-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                                <p class="mt-4 text-sm font-bold text-gray-800">インストラクター</p>
+                                <div id="studio-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
                         </div>
                         <div id="pilates-subsection" class="mt-6 hidden">
                             <h3 class="text-base font-black text-joytext">ピラティスマシン（リフォーマー）を選んだ方</h3>
-                            <p class="mt-1 text-sm text-gray-600">お気に入りのレッスン名（複数選択）</p>
-                            <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-                            <p class="mt-4 text-sm text-gray-600">お気に入りのインストラクター（複数選択）</p>
-                            <div id="pilates-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            <div id="pilates-detail" class="hidden mt-3">
+                                <p class="text-sm font-bold text-gray-800">レッスン</p>
+                                <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                                <p class="mt-4 text-sm font-bold text-gray-800">インストラクター</p>
+                                <div id="pilates-instructor-grid" class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -170,27 +169,39 @@
                 { imgBase: 'freeweight_11' }, { imgBase: 'freeweight_12' }
             ] }
         ];
-        const machineDisplayNames = {
-            cardio_1: 'トレッドミル',
-            cardio_2: 'クロストレーナー',
-            cardio_3: 'エアロバイク（リカンベント含む）',
-            freeweight_1: 'パワーラック',
-            resistance_1: 'レッグプレス（脚全体・もも前・お尻）',
-            resistance_2: 'レッグエクステンション（もも前・大腿四頭筋）',
-            resistance_3: 'レッグカール（太もも裏・ハムストリング）',
-            resistance_4: 'アダクター（内もも）',
-            resistance_5: 'アブダクター（外もも・お尻）',
-            resistance_6: 'ヒップ＆グルート（お尻・ハムストリング）',
-            resistance_7: 'ラットプルダウン（広背筋・背中）',
-            resistance_8: 'シーテッドロー（背中・僧帽筋）',
-            resistance_9: 'リアデルト（肩裏・三角筋後部）',
-            resistance_10: 'チェストプレス（大胸筋）',
-            resistance_11: 'ショルダープレス（肩・三角筋）',
-            resistance_12: 'バイセップカール（上腕二頭筋）',
-            resistance_13: 'トライセップ（上腕三頭筋）',
-            resistance_14: 'アブドミナル（腹筋）',
-            resistance_15: 'バックエクステンション（腰裏・脊柱起立筋）'
-        };
+        /**
+         * resistance_1.jpg 〜 resistance_15.jpg の並び（左から等）に対応する表示名。
+         * 写真とズレる場合はこの配列の順だけ入れ替えてください（ファイル名は変えない）。
+         */
+        const RESISTANCE_LABELS = [
+            'レッグプレス',
+            'レッグエクステンション',
+            'レッグカール',
+            'アダクター',
+            'アブダクター',
+            'ヒップ＆グルート',
+            'ラットプルダウン',
+            'シーテッドロー',
+            'リアデルト',
+            'チェストプレス',
+            'ショルダープレス',
+            'バイセップカール',
+            'トライセップ',
+            'アブドミナル',
+            'バックエクステンション'
+        ];
+        const machineDisplayNames = (function () {
+            const o = {
+                cardio_1: 'トレッドミル',
+                cardio_2: 'クロストレーナー',
+                cardio_3: 'エアロバイク',
+                freeweight_1: 'パワーラック'
+            };
+            RESISTANCE_LABELS.forEach((label, i) => {
+                o['resistance_' + (i + 1)] = label;
+            });
+            return o;
+        })();
 
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
 
@@ -203,6 +214,8 @@
         const studioInstructorGrid = document.getElementById('studio-instructor-grid');
         const pilatesLessonGrid = document.getElementById('pilates-lesson-grid');
         const pilatesInstructorGrid = document.getElementById('pilates-instructor-grid');
+        const studioDetail = document.getElementById('studio-detail');
+        const pilatesDetail = document.getElementById('pilates-detail');
         const top5Selected = document.getElementById('top5-selected');
         const top5CandidateGrid = document.getElementById('top5-candidate-grid');
         const form = document.getElementById('survey-form');
@@ -211,10 +224,8 @@
         const surveyMainSections = document.getElementById('survey-main-sections');
         const usageWizardCard = document.getElementById('usage-wizard-card');
         const usageSummaryBar = document.getElementById('usage-summary-bar');
-        const usageSummaryText = document.getElementById('usage-summary-text');
         const wizardStepLabel = document.getElementById('wizard-step-label');
         const wizardHeading = document.getElementById('wizard-heading');
-        const wizardLead = document.getElementById('wizard-lead');
         const wizardTapGrid = document.getElementById('wizard-tap-grid');
         const wizardNeverSummary = document.getElementById('wizard-never-summary');
         const wizardBackBtn = document.getElementById('wizard-back-btn');
@@ -282,8 +293,6 @@
             { day: '日', area: 'ホットスタジオ', start: '15:15', end: '16:30', name: 'ポール&ヨガベーシック', star: '★☆', instructor: 'Shikano' },
             { day: '日', area: 'ホットスタジオ', start: '16:45', end: '17:45', name: 'リラックスほぐし＆骨盤調整', star: '★', instructor: 'Shikano' }
         ];
-        const pilatesInstructors = ['YUKI', 'Hana', 'みと'];
-        const studioInstructors = [...new Set(lessonSchedule.filter((x) => x.area === 'ホットスタジオ').map((x) => x.instructor))];
 
         let wizardStep = 1;
         const pickAlways = new Set();
@@ -321,13 +330,16 @@
                 btn.dataset.service = service;
                 const imgSrc = getServiceImageSrc(service);
                 const selected = activeSet.has(service);
-                btn.className = `wizard-card block w-full text-left border rounded-xl p-2 transition ${
-                    selected ? 'border-joyred bg-red-50 ring-2 ring-red-200' : 'border-joygray bg-white hover:border-joyred'
+                btn.className = `wizard-card relative block w-full text-left border rounded-xl p-2 transition ${
+                    selected ? 'border-gray-400 bg-gray-200 opacity-90' : 'border-joygray bg-white hover:border-gray-400'
                 }`;
+                const check = selected
+                    ? '<span class="absolute top-2 right-2 z-10 flex h-7 w-7 items-center justify-center rounded border border-gray-500 bg-white text-sm font-bold text-gray-700 shadow-sm" aria-hidden="true">✓</span>'
+                    : '';
                 const imgHtml = imgSrc
                     ? `<div class="rounded-lg overflow-hidden bg-gray-50 mb-2 h-36 md:h-44 flex items-center justify-center"><img src="${imgSrc}" alt="" class="w-full h-full object-contain" loading="lazy"></div>`
                     : `<div class="rounded-lg bg-gray-100 mb-2 h-36 md:h-44 flex items-center justify-center text-xs text-gray-400">画像なし</div>`;
-                btn.innerHTML = `${imgHtml}<span class="text-sm font-bold">${service}</span>`;
+                btn.innerHTML = `${check}${imgHtml}<span class="text-sm font-bold">${service}</span>`;
                 btn.addEventListener('click', () => {
                     if (activeSet.has(service)) activeSet.delete(service);
                     else activeSet.add(service);
@@ -344,43 +356,31 @@
             wizardTapGrid.classList.remove('hidden');
             if (wizardStep === 1) {
                 wizardHeading.textContent = 'いつも利用しているサービスを選択してください';
-                wizardLead.textContent =
-                    '必ず利用するもの（＝100％）にあたるサービスをタップで選んでください（複数可）。当てはまるものがなければそのまま「次へ」へ進んでください。';
                 renderTapGrid(pickAlways);
             } else if (wizardStep === 2) {
                 wizardHeading.textContent = 'たまに利用するサービスを選択してください';
-                wizardLead.textContent =
-                    'たまにしか使わないもの（＝50％）をタップで選んでください（複数可）。ステップ1で選んだサービスは表示されません。該当がなければそのまま「次へ」へ。';
                 renderTapGrid(pickSometimes);
             } else {
                 wizardHeading.textContent = '利用しないサービス（0％）の確認';
-                wizardLead.textContent =
-                    'ここまで選ばれなかったサービスは「全く利用しない（0％）」として記録されます。リニューアル時の優先度整理に使えます。内容をご確認のうえ進んでください。';
                 wizardTapGrid.classList.add('hidden');
                 wizardNeverSummary.classList.remove('hidden');
                 const never = services.filter((s) => !pickAlways.has(s) && !pickSometimes.has(s));
                 if (never.length === 0) {
-                    wizardNeverSummary.innerHTML =
-                        '<p class="font-bold text-gray-800">すべてのサービスがステップ1または2で選択されています（0％の項目はありません）。</p>';
+                    wizardNeverSummary.innerHTML = '<p class="text-sm text-gray-600">（該当なし）</p>';
                 } else {
                     wizardNeverSummary.innerHTML =
-                        '<p class="mb-2 font-bold text-gray-800">次のサービスは「利用しない（0％）」に分類されます。</p><ul class="list-disc pl-5 space-y-1 text-gray-700">' +
+                        '<ul class="list-disc pl-5 space-y-0.5 text-sm text-gray-800">' +
                         never.map((s) => `<li>${s}</li>`).join('') +
                         '</ul>';
                 }
             }
             wizardBackBtn.classList.toggle('invisible', wizardStep === 1);
-            wizardNextBtn.textContent = wizardStep === 3 ? '次へ（アンケート本編を表示）' : '次へ';
+            wizardNextBtn.textContent = '次へ';
         }
 
         function finishWizard() {
             wizardFinished = true;
             usageWizardCard.classList.add('hidden');
-            const u = buildUsageByService();
-            const n100 = services.filter((s) => u[s] === 100).length;
-            const n50 = services.filter((s) => u[s] === 50).length;
-            const n0 = services.filter((s) => u[s] === 0).length;
-            usageSummaryText.textContent = `100％（必ず）: ${n100}件 ／ 50％（たまに）: ${n50}件 ／ 0％（利用しない）: ${n0}件`;
             usageSummaryBar.classList.remove('hidden');
             surveyMainSections.classList.remove('hidden');
             updateConditionalSections();
@@ -466,6 +466,10 @@
             });
         }
 
+        function uniqueSorted_(arr) {
+            return [...new Set(arr)].sort((a, b) => a.localeCompare(b, 'ja'));
+        }
+
         function updateConditionalSections() {
             const selectedServices = getActiveServices();
             const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
@@ -473,17 +477,49 @@
             const showStudio = selectedServices.includes('スタジオ');
             const showPilates = selectedServices.includes('ピラティスマシン（リフォーマー）');
             const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
-            const filteredByDay = selectedDays.length
+            const hasLessonDays = selectedDays.length > 0;
+            const filteredByDay = hasLessonDays
                 ? lessonSchedule.filter((x) => selectedDays.includes(x.day))
-                : lessonSchedule;
+                : [];
             const studioLessons = filteredByDay.filter((x) => x.area === 'ホットスタジオ');
             const pilatesLessons = filteredByDay.filter((x) => x.area === 'ピラティスルーム');
-            top5Section.classList.toggle('hidden', !showTop5 || !wizardFinished);
-            lessonSection.classList.toggle('hidden', !showLesson || !wizardFinished);
+            const ready = wizardFinished;
+
+            top5Section.classList.toggle('hidden', !showTop5 || !ready);
+            lessonSection.classList.toggle('hidden', !showLesson || !ready);
+
             studioSubsection.classList.toggle('hidden', !showStudio);
+            if (showStudio && hasLessonDays && ready) {
+                studioDetail.classList.remove('hidden');
+                createLessonCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
+                studioInstructorGrid.innerHTML = '';
+                createOptionCheckboxGrid(
+                    studioInstructorGrid,
+                    'studioFavoriteInstructors',
+                    uniqueSorted_(studioLessons.map((x) => x.instructor))
+                );
+            } else {
+                studioDetail.classList.add('hidden');
+                studioLessonGrid.innerHTML = '';
+                studioInstructorGrid.innerHTML = '';
+            }
+
             pilatesSubsection.classList.toggle('hidden', !showPilates);
-            if (showStudio) createLessonCheckboxGrid(studioLessonGrid, 'studioFavoriteLessons', studioLessons);
-            if (showPilates) createLessonCheckboxGrid(pilatesLessonGrid, 'pilatesFavoriteLessons', pilatesLessons);
+            if (showPilates && hasLessonDays && ready) {
+                pilatesDetail.classList.remove('hidden');
+                createLessonCheckboxGrid(pilatesLessonGrid, 'pilatesFavoriteLessons', pilatesLessons);
+                pilatesInstructorGrid.innerHTML = '';
+                createOptionCheckboxGrid(
+                    pilatesInstructorGrid,
+                    'pilatesFavoriteInstructors',
+                    uniqueSorted_(pilatesLessons.map((x) => x.instructor))
+                );
+            } else {
+                pilatesDetail.classList.add('hidden');
+                pilatesLessonGrid.innerHTML = '';
+                pilatesInstructorGrid.innerHTML = '';
+            }
+
             if (!showTop5) {
                 top5Selection.length = 0;
                 renderTop5Selected();
@@ -498,8 +534,8 @@
                 const box = document.createElement('div');
                 box.className = 'border border-joygray rounded-xl bg-white p-2 min-h-[52px] flex items-center';
                 box.innerHTML = selected
-                    ? `<div class="text-xs md:text-sm leading-snug"><span class="font-black text-joyred mr-1">${i + 1}位</span><span>${selected.label || '選択済み'}</span></div>`
-                    : `<div class="text-sm text-gray-400"><span class="font-black mr-1">${i + 1}位</span>未選択</div>`;
+                    ? `<div class="text-xs md:text-sm leading-snug text-gray-800"><span class="font-bold text-gray-500 mr-1">${i + 1}位</span><span>${selected.label || '選択済み'}</span></div>`
+                    : `<div class="text-sm text-gray-400"><span class="font-bold mr-1">${i + 1}位</span>未選択</div>`;
                 top5Selected.appendChild(box);
             }
         }
@@ -523,13 +559,18 @@
                 const rank = top5Selection.findIndex((m) => m.id === machine.id) + 1;
                 const button = document.createElement('button');
                 button.type = 'button';
-                button.className = `relative border rounded-lg overflow-hidden bg-white p-1 transition ${isSelected ? 'border-joyred ring-2 ring-red-200' : 'border-joygray hover:border-joyred'}`;
+                button.className = `relative border rounded-lg overflow-hidden p-1 transition ${
+                    isSelected ? 'border-gray-500 bg-gray-200' : 'border-joygray bg-white hover:border-gray-400'
+                }`;
                 const caption = machine.label
                     ? `<p class="mt-1 px-0.5 text-[10px] md:text-[11px] leading-snug text-center text-gray-700 line-clamp-3">${machine.label}</p>`
                     : '';
+                const mark = isSelected
+                    ? `<span class="absolute top-1 left-1 z-10 flex h-6 w-6 items-center justify-center rounded border border-gray-600 bg-white text-[11px] font-bold text-gray-800 shadow-sm" title="${rank}位">✓</span>`
+                    : '';
                 button.innerHTML = `
-                    ${isSelected ? `<span class="absolute top-1 left-1 z-10 text-[10px] px-1.5 py-0.5 bg-joyred text-white rounded-full font-black">${rank}位</span>` : ''}
-                    <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain"
+                    ${mark}
+                    <img src="${machine.img}" alt="${machine.label}" class="w-full aspect-square object-contain ${isSelected ? 'opacity-60' : ''}"
                          onerror="this.onerror=null;this.src='https://placehold.co/120x120/f4f4f5/888888?text=No+Image';">
                     ${caption}
                 `;
@@ -617,8 +658,6 @@
         });
 
         createWeekdayCheckboxes();
-        createOptionCheckboxGrid(studioInstructorGrid, 'studioFavoriteInstructors', studioInstructors);
-        createOptionCheckboxGrid(pilatesInstructorGrid, 'pilatesFavoriteInstructors', pilatesInstructors);
         renderTop5Selected();
         renderTop5Candidates();
         document.querySelectorAll('input[name="lessonWeekdays"]').forEach((checkbox) => {
