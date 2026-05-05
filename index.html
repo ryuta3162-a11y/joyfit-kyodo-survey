@@ -83,7 +83,7 @@
                     </div>
 
                     <div id="lesson-section" class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui hidden">
-                        <h2 class="text-xl md:text-2xl font-black text-joyred">3. スタジオ・ピラティスマシン（リフォーマー）について</h2>
+                        <h2 class="text-xl md:text-2xl font-black text-joyred">3. スタジオ・マシンピラティス(リフォーマー)について</h2>
                         <p class="mt-2 text-sm text-gray-600">該当サービスを選んだ方のみ回答してください</p>
                         <div id="weekday-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
                         <div id="studio-subsection" class="mt-5 hidden">
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div id="pilates-subsection" class="mt-6 hidden">
-                            <h3 class="text-base font-black text-joytext">ピラティスマシン（リフォーマー）を選んだ方</h3>
+                            <h3 class="text-base font-black text-joytext">マシンピラティス(リフォーマー)を選んだ方</h3>
                             <div id="pilates-detail" class="hidden mt-3">
                                 <p class="text-sm font-bold text-gray-800">お気に入りのレッスンを選択してください</p>
                                 <div id="pilates-lesson-grid" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
@@ -108,7 +108,7 @@
 
                     <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
                         <h2 class="text-xl md:text-2xl font-black text-joyred">4. ご希望（任意）</h2>
-                        <p class="mt-2 text-sm text-gray-600">もっとこんなマシンがあれば、設備や環境についてのご希望など、おありでしたらご記入ください。（お声を参考に検討致します）</p>
+                        <p class="mt-2 text-sm text-gray-600">ご希望のマシンがあればこちらに記載ください。（お声を参考に検討致します）</p>
                         <label class="block mt-4">
                             <span class="text-sm font-bold">マシンについて</span>
                             <textarea name="wantedMachines" class="focus-ring mt-2 w-full rounded-xl border border-joygray px-4 py-3" rows="3" placeholder="ご希望やご感想を自由にお書きください（未記入でも構いません）"></textarea>
@@ -145,7 +145,7 @@
             'サウナ',
             'ミストサウナ',
             'スタジオ',
-            'ピラティスマシン（リフォーマー）',
+            'マシンピラティス(リフォーマー)',
             'エステ',
             'タンニング'
         ];
@@ -242,7 +242,7 @@
             }))
         );
         const coreMachineServices = ['FWエリア', 'マシンエリア', '有酸素エリア'];
-        const studioServices = ['スタジオ', 'ピラティスマシン（リフォーマー）'];
+        const studioServices = ['スタジオ', 'マシンピラティス(リフォーマー)'];
         const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
         const lessonSchedule = [
             { day: '月', area: 'ホットスタジオ', start: '9:30', end: '10:30', name: 'ハタヨガ', star: '★', instructor: '菊池 智子' },
@@ -475,7 +475,7 @@
             const showTop5 = selectedServices.some((item) => coreMachineServices.includes(item));
             const showLesson = selectedServices.some((item) => studioServices.includes(item));
             const showStudio = selectedServices.includes('スタジオ');
-            const showPilates = selectedServices.includes('ピラティスマシン（リフォーマー）');
+            const showPilates = selectedServices.includes('マシンピラティス(リフォーマー)');
             const selectedDays = Array.from(document.querySelectorAll('input[name="lessonWeekdays"]:checked')).map((el) => el.value);
             const hasLessonDays = selectedDays.length > 0;
             const filteredByDay = hasLessonDays
