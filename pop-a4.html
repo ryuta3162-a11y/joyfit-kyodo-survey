@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOYFIT24 経堂 会員様アンケート POP</title>
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    * { box-sizing: border-box; }
+    :root {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(160deg, #eceff3 0%, #e5e7eb 100%);
+      font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+    }
+    .toolbar {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+    }
+    .print-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(145deg, #c22045, #981a36);
+      box-shadow: 0 8px 20px rgba(152, 26, 54, 0.25);
+      cursor: pointer;
+    }
+    .print-btn:hover { filter: brightness(1.05); }
+    .sheet {
+      position: relative;
+      overflow: hidden;
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      background: #ffffff;
+      color: #111827;
+      padding: 14mm 14mm 12mm;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 5mm 14mm rgba(31, 41, 55, 0.16);
+    }
+    .sheet::before,
+    .sheet::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .sheet::before {
+      width: 95mm;
+      height: 95mm;
+      right: -28mm;
+      top: -26mm;
+      background: radial-gradient(circle at center, rgba(194, 32, 69, 0.3), rgba(194, 32, 69, 0));
+    }
+    .sheet::after {
+      width: 115mm;
+      height: 115mm;
+      left: -44mm;
+      bottom: -52mm;
+      background: radial-gradient(circle at center, rgba(246, 186, 64, 0.24), rgba(246, 186, 64, 0));
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 9mm;
+    }
+    .logo {
+      width: 125mm;
+      max-width: 100%;
+      height: auto;
+      border-radius: 2mm;
+      object-fit: contain;
+      box-shadow: 0 1.8mm 4mm rgba(178, 31, 58, 0.22);
+    }
+    .store {
+      text-align: center;
+      color: #b21f3a;
+      font-weight: 700;
+      font-size: 6.4mm;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .title {
+      margin: 2.5mm 0 0;
+      text-align: center;
+      font-weight: 900;
+      font-size: 17.6mm;
+      line-height: 1.2;
+      color: #b21f3a;
+      text-shadow: 0 1mm 0 rgba(255, 255, 255, 0.65);
+    }
+    .subtitle {
+      margin: 3.5mm 0 0;
+      text-align: center;
+      font-weight: 700;
+      font-size: 7.5mm;
+      color: #1f2937;
+    }
+    .body {
+      margin: 11mm 0 0;
+      text-align: center;
+      font-size: 6.2mm;
+      line-height: 1.85;
+      color: #374151;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.64));
+      border: 1px solid #f3d6de;
+      border-radius: 4mm;
+      padding: 5mm 4mm;
+      box-shadow: 0 1.6mm 4mm rgba(178, 31, 58, 0.08);
+    }
+    .qr-wrap {
+      margin-top: 14mm;
+      display: flex;
+      justify-content: center;
+    }
+    .qr-card {
+      position: relative;
+      border: 1px solid #f0d6dd;
+      border-radius: 5mm;
+      padding: 6.5mm;
+      box-shadow: 0 3mm 10mm rgba(178, 31, 58, 0.2), 0 0.5mm 0 rgba(255, 255, 255, 0.8) inset;
+      background: linear-gradient(165deg, #fff 0%, #fff7f9 100%);
+    }
+    .qr-card::before {
+      content: "";
+      position: absolute;
+      inset: -0.8mm;
+      border-radius: 5.5mm;
+      background: linear-gradient(145deg, rgba(178, 31, 58, 0.22), rgba(246, 186, 64, 0.25));
+      z-index: -1;
+    }
+    .qr {
+      width: 75mm;
+      height: 75mm;
+      object-fit: contain;
+      display: block;
+    }
+    .cta {
+      margin: 7mm 0 0;
+      text-align: center;
+      font-size: 7.8mm;
+      font-weight: 900;
+      color: #b21f3a;
+      line-height: 1.5;
+      text-shadow: 0 0.6mm 0 rgba(255, 255, 255, 0.7);
+    }
+    @media print {
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .sheet {
+        margin: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" class="print-btn" onclick="window.print()">印刷する</button>
+  </div>
+  <main class="sheet">
+    <div class="content">
+    <div class="logo-wrap">
+      <img
+        class="logo"
+        src="C:/Users/81703/.cursor/projects/c-Users-81703-OneDrive/assets/c__Users_81703_AppData_Roaming_Cursor_User_workspaceStorage_a9b1b9b607b3b0b196ac288fa9829264_images_JOYLOGO__-____-c5cdf28c-b39d-42e2-bc09-c90f704cfa9b.png"
+        alt="JOYFIT24 ロゴ"
+      />
+    </div>
+
+    <p class="store">JOYFIT24 経堂</p>
+    <h1 class="title">会員様アンケート</h1>
+    <p class="subtitle">ご協力をお願いいたします</p>
+
+    <section class="body">
+      <div>いつもご利用ありがとうございます。</div>
+      <div>サービス向上のため、ぜひお声をお聞かせください。</div>
+    </section>
+
+    <div class="qr-wrap">
+      <div class="qr-card">
+        <img
+          class="qr"
+          src="C:/Users/81703/.cursor/projects/c-Users-81703-OneDrive/assets/c__Users_81703_AppData_Roaming_Cursor_User_workspaceStorage_a9b1b9b607b3b0b196ac288fa9829264_images_QR_962298-504d6444-e707-46dd-a293-e28f03a14f4b.png"
+          alt="アンケートQRコード"
+        />
+      </div>
+    </div>
+
+    <p class="cta">スマホでQRを読み取ってご回答ください</p>
+    </div>
+  </main>
+</body>
+</html>
