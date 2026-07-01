@@ -62,17 +62,19 @@
       height: var(--card-h);
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
+      gap: 1.2mm;
       border: 0.3mm solid var(--joy-pale);
       border-top: 1.2mm solid var(--joy);
       border-left: 0.6mm solid var(--joy);
       background: #fff;
-      padding: 1.8mm 2.2mm 1.6mm;
+      padding: 2mm 2.4mm 2mm;
       overflow: hidden;
     }
     .head {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       gap: 1.5mm;
       flex-shrink: 0;
     }
@@ -82,22 +84,22 @@
     }
     .store {
       margin: 0;
-      font-size: 2.8mm;
+      font-size: 3.1mm;
       font-weight: 900;
       color: var(--joy);
       letter-spacing: 0.04em;
-      line-height: 1.15;
+      line-height: 1.2;
     }
     .vol {
-      margin: 0.5mm 0 0;
-      font-size: 2.9mm;
+      margin: 0.6mm 0 0;
+      font-size: 3.2mm;
       font-weight: 900;
       color: var(--joy);
-      line-height: 1.15;
+      line-height: 1.2;
     }
     .qr {
-      width: 17mm;
-      height: 17mm;
+      width: 19mm;
+      height: 19mm;
       flex-shrink: 0;
       object-fit: contain;
       display: block;
@@ -107,27 +109,26 @@
       background: #fff;
     }
     .catch {
-      margin: 1mm 0 0;
-      font-size: 3.5mm;
+      margin: 0;
+      font-size: 4mm;
       font-weight: 900;
       color: var(--joy);
-      line-height: 1.18;
+      line-height: 1.22;
       flex-shrink: 0;
     }
     .body {
-      margin: 0.8mm 0 0;
-      font-size: 2.25mm;
-      line-height: 1.38;
+      margin: 0;
+      font-size: 2.6mm;
+      line-height: 1.42;
       color: var(--muted);
       font-weight: 500;
-      flex: 1;
-      min-height: 0;
+      flex-shrink: 0;
     }
     .cta {
-      margin: 0.8mm 0 0;
-      padding-top: 0.7mm;
-      border-top: 0.25mm solid var(--joy-pale);
-      font-size: 2.5mm;
+      margin: 0;
+      padding-top: 0.9mm;
+      border-top: 0.3mm solid var(--joy-pale);
+      font-size: 2.85mm;
       font-weight: 900;
       color: var(--joy);
       text-align: center;
@@ -166,7 +167,7 @@
           <p class="store">JOYFIT24 経堂</p>
           <p class="vol">お客様アンケートVOL.2</p>
         </div>
-        <img class="qr" src="" alt="アンケートQR" width="170" height="170" />
+        <img class="qr" src="" alt="アンケートQR" width="190" height="190" />
       </div>
       <h2 class="catch">JOYFIT24経堂に<br>設置してほしいマシン！</h2>
       <p class="body">
@@ -179,7 +180,7 @@
   <script>
     const SURVEY_URL = 'https://joyfit-kyodo-survey.vercel.app/vol2.html';
     const QR_SRC =
-      'https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=' + encodeURIComponent(SURVEY_URL);
+      'https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=' + encodeURIComponent(SURVEY_URL);
 
     const sheet = document.getElementById('sheet');
     const tpl = document.getElementById('card-template');
