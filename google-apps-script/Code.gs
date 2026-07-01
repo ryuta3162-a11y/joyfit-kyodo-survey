@@ -248,6 +248,15 @@ function setupVol2ResponseHeaders() {
 }
 
 /**
+ * 初回だけエディタから実行してください（参考画像を Drive に保存する権限の許可）。
+ * 実行 → 「権限を確認」→ 許可 → ログに OK と出れば完了。
+ */
+function authorizeVol2Drive() {
+  var folder = getOrCreateVol2ImageFolder_();
+  Logger.log('OK: Drive folder = ' + folder.getName() + ' (' + folder.getId() + ')');
+}
+
+/**
  * GET でダッシュボード HTML を返す。
  * デプロイ: 「ウェブアプリ」で新バージョン作成。アクセス権は共有範囲に合わせて設定。
  * （アンケート送信用の doPost と同じプロジェクト・別 URL になる場合は、同一デプロイに doGet / doPost 両方を含める）
