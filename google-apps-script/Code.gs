@@ -7,6 +7,8 @@
 
 const SPREADSHEET_ID = '1h_hG-ac0DwPLLPuxsMNf4umsgQjJkv7bdTE69eATqIQ';
 const SHEET_NAME = 'responses';
+const SHEET_NAME_VOL2 = 'responses_vol2';
+const VOL2_DRIVE_FOLDER_NAME = 'JOYFIT24経堂_アンケートVOL2_参考画像';
 
 /** アンケートのサービス順（index.html の services と同じ順） */
 const SERVICE_ORDER = [
@@ -87,14 +89,18 @@ function ensureResponseHeaderRow_(sheet) {
 
 function doPost(e) {
   try {
+    const raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
+    const data = JSON.parse(raw);
+
+    if (data.version === 'vol2') {
+      return doPostVol2_(data);
+    }
+
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) throw new Error('Sheet not found: ' + SHEET_NAME);
 
     ensureResponseHeaderRow_(sheet);
-
-    const raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
-    const data = JSON.parse(raw);
 
     const dep = data.dependency || {};
     const parts = splitUsageByLevel_(dep);
@@ -147,6 +153,96 @@ function setupResponseHeaders() {
   if (!sheet) throw new Error('Sheet not found: ' + SHEET_NAME);
 
   const headers = getResponseHeaders_();
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  sheet.setFrozenRows(1);
+}
+
+/** VOL.2 見出し（設置してほしいマシン聞き取り） */
+function getVol2ResponseHeaders_() {
+  return [
+    '受信日時',
+    '送信日時（ISO）',
+    '設置してほしいマシン',
+    '参考URL',
+    '参考画像リンク',
+    '補足・理由'
+  ];
+}
+
+function getOrCreateSheet_(ss, sheetName, headers) {
+  var sheet = ss.getSheetByName(sheetName);
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+  }
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.setFrozenRows(1);
+    return sheet;
+  }
+  var a1 = String(sheet.getRange(1, 1).getDisplayValue() || '').trim();
+  if (a1 !== headers[0]) {
+    sheet.insertRowBefore(1);
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  }
+  sheet.setFrozenRows(1);
+  return sheet;
+}
+
+function getOrCreateVol2ImageFolder_() {
+  var folders = DriveApp.getFoldersByName(VOL2_DRIVE_FOLDER_NAME);
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+  return DriveApp.createFolder(VOL2_DRIVE_FOLDER_NAME);
+}
+
+function saveVol2Images_(images, submittedAt) {
+  if (!images || !images.length) return '';
+  var folder = getOrCreateVol2ImageFolder_();
+  var stamp = Utilities.formatDate(new Date(submittedAt || Date.now()), Session.getScriptTimeZone(), 'yyyyMMdd_HHmmss');
+  var urls = [];
+  images.forEach(function (img, i) {
+    if (!img || !img.dataBase64) return;
+    var mime = img.mimeType || 'image/jpeg';
+    var ext = mime.indexOf('png') >= 0 ? 'png' : (mime.indexOf('webp') >= 0 ? 'webp' : 'jpg');
+    var name = String(img.name || ('image_' + (i + 1) + '.' + ext)).replace(/[\\/:*?"<>|]/g, '_');
+    var blob = Utilities.newBlob(Utilities.base64Decode(img.dataBase64), mime, stamp + '_' + name);
+    var file = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    urls.push(file.getUrl());
+  });
+  return urls.join('\n');
+}
+
+function doPostVol2_(data) {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var headers = getVol2ResponseHeaders_();
+  var sheet = getOrCreateSheet_(ss, SHEET_NAME_VOL2, headers);
+
+  var imageLinks = saveVol2Images_(data.images || [], data.submittedAt);
+  var urls = (data.referenceUrls || []).map(function (u) {
+    return String(u || '').trim();
+  }).filter(Boolean);
+
+  sheet.appendRow([
+    new Date(),
+    data.submittedAt || '',
+    String(data.machineRequest || '').trim(),
+    urls.join('\n'),
+    imageLinks,
+    String(data.note || '').trim()
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** VOL.2 シートの1行目を見出しで上書き（手動メンテ用） */
+function setupVol2ResponseHeaders() {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var headers = getVol2ResponseHeaders_();
+  var sheet = getOrCreateSheet_(ss, SHEET_NAME_VOL2, headers);
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.setFrozenRows(1);
 }

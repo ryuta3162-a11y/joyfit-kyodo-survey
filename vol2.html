@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOYFIT24 経堂 - 会員様アンケート VOL.2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        joyred: '#C71744',
+                        joybg: '#F9F9F9',
+                        joypanel: '#FFFFFF',
+                        joygray: '#E5E7EB',
+                        joytext: '#333333'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', sans-serif; }
+        .card-ui { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04); }
+        .drop-zone.dragover { border-color: #C71744; background: #fff5f7; }
+    </style>
+</head>
+<body class="bg-joybg text-joytext selection:bg-joyred selection:text-white">
+    <main class="min-h-screen pb-16">
+        <section class="relative w-full bg-joypanel border-b-[8px] border-joyred shadow-sm">
+            <div class="max-w-3xl mx-auto px-4 py-10 md:py-14 text-center">
+                <p class="font-black text-joyred tracking-[0.2em] text-sm md:text-base">JOYFIT24 経堂</p>
+                <p class="mt-2 inline-block rounded-full bg-joyred/10 px-4 py-1 text-xs font-black text-joyred tracking-wider">VOL.2</p>
+                <h1 class="mt-3 text-2xl md:text-4xl font-black tracking-wide leading-snug">設置してほしいマシン<br class="md:hidden">アンケート</h1>
+                <p class="mt-4 text-sm md:text-base text-gray-600 leading-relaxed max-w-xl mx-auto">
+                    ご希望のマシン名や、参考になる商品ページ・画像があればお知らせください。<br>
+                    皆さまのお声をもとに、設備導入を検討いたします。
+                </p>
+            </div>
+        </section>
+
+        <section class="max-w-3xl mx-auto px-4 py-8 md:py-10">
+            <form id="vol2-form" class="space-y-6">
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <label for="machine-request" class="block text-lg font-black text-joyred">
+                        設置してほしいマシン <span class="text-sm font-bold text-gray-500">（必須）</span>
+                    </label>
+                    <p class="mt-2 text-sm text-gray-600">マシン名・メーカー・使ったことのある店舗など、分かる範囲でご記入ください。</p>
+                    <textarea id="machine-request" name="machineRequest" required rows="5"
+                        class="mt-4 w-full rounded-xl border border-joygray px-4 py-3 text-sm focus:border-joyred focus:outline-none focus:ring-2 focus:ring-joyred/20"
+                        placeholder="例）ハックスクワット&#10;例）ピラティスリフォーマー（〇〇メーカー）"></textarea>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <h2 class="text-lg font-black text-joyred">参考URL <span class="text-sm font-bold text-gray-500">（任意）</span></h2>
+                    <p class="mt-2 text-sm text-gray-600">メーカーサイト・YouTube・SNSなど、参考になるリンクを貼ってください。</p>
+                    <div id="url-list" class="mt-4 space-y-3"></div>
+                    <button type="button" id="add-url-btn"
+                        class="mt-3 rounded-full border-2 border-joygray bg-white px-5 py-2 text-sm font-bold hover:border-joyred transition">
+                        ＋ URLを追加
+                    </button>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <h2 class="text-lg font-black text-joyred">参考画像 <span class="text-sm font-bold text-gray-500">（任意・最大3枚）</span></h2>
+                    <p class="mt-2 text-sm text-gray-600">スマホの写真やスクショをそのまま添付できます（1枚あたり2MBまで）。</p>
+                    <label id="drop-zone" for="image-input"
+                        class="drop-zone mt-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-joygray bg-gray-50 px-4 py-10 cursor-pointer transition">
+                        <span class="text-3xl" aria-hidden="true">📷</span>
+                        <span class="mt-2 text-sm font-bold text-gray-700">タップして選択、またはここにドロップ</span>
+                        <span class="mt-1 text-xs text-gray-500">JPEG / PNG / WebP</span>
+                    </label>
+                    <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only">
+                    <div id="image-preview" class="mt-4 grid grid-cols-3 gap-3"></div>
+                </div>
+
+                <div class="bg-joypanel border border-joygray rounded-2xl p-5 md:p-7 card-ui">
+                    <label for="note" class="block text-lg font-black text-joyred">補足・理由 <span class="text-sm font-bold text-gray-500">（任意）</span></label>
+                    <p class="mt-2 text-sm text-gray-600">なぜそのマシンが欲しいか、置き場所のイメージなど。</p>
+                    <textarea id="note" name="note" rows="3"
+                        class="mt-4 w-full rounded-xl border border-joygray px-4 py-3 text-sm focus:border-joyred focus:outline-none focus:ring-2 focus:ring-joyred/20"
+                        placeholder="例）脚のトレーニングがもっと充実すると嬉しいです"></textarea>
+                </div>
+
+                <div class="flex flex-col items-center gap-3 pt-2">
+                    <button type="submit" id="submit-btn"
+                        class="w-full md:w-auto rounded-full bg-joyred px-12 py-3.5 text-base font-black text-white shadow-sm hover:opacity-90 transition disabled:opacity-50">
+                        送信する
+                    </button>
+                    <p id="status-text" class="text-sm text-gray-600 text-center min-h-[1.25rem]"></p>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZNoxNOYAX5r3GkK11BXymU0SQOvMpgWIwfYbffa1uISB3sDwWBBV-L2wN5yrTT_ub/exec';
+        const MAX_IMAGES = 3;
+        const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
+        const form = document.getElementById('vol2-form');
+        const urlList = document.getElementById('url-list');
+        const addUrlBtn = document.getElementById('add-url-btn');
+        const imageInput = document.getElementById('image-input');
+        const dropZone = document.getElementById('drop-zone');
+        const imagePreview = document.getElementById('image-preview');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusText = document.getElementById('status-text');
+
+        let selectedImages = [];
+
+        function addUrlField(value = '') {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex gap-2 items-center';
+            wrap.innerHTML = `
+                <input type="url" name="referenceUrl" value="${value.replace(/"/g, '&quot;')}" placeholder="https://..."
+                    class="flex-1 rounded-xl border border-joygray px-4 py-2.5 text-sm focus:border-joyred focus:outline-none focus:ring-2 focus:ring-joyred/20">
+                <button type="button" class="remove-url shrink-0 rounded-lg border border-gray-300 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100" title="削除">削除</button>
+            `;
+            wrap.querySelector('.remove-url').addEventListener('click', () => {
+                if (urlList.children.length > 1) {
+                    wrap.remove();
+                } else {
+                    wrap.querySelector('input').value = '';
+                }
+            });
+            urlList.appendChild(wrap);
+        }
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const result = String(reader.result || '');
+                    const base64 = result.includes(',') ? result.split(',')[1] : result;
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderImagePreview() {
+            imagePreview.innerHTML = '';
+            selectedImages.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'relative rounded-lg border border-joygray overflow-hidden bg-white';
+                card.innerHTML = `
+                    <img src="${item.previewUrl}" alt="" class="w-full aspect-square object-cover">
+                    <button type="button" data-index="${index}"
+                        class="absolute top-1 right-1 rounded-full bg-black/60 text-white text-xs w-7 h-7 font-bold hover:bg-black/80">×</button>
+                `;
+                card.querySelector('button').addEventListener('click', () => {
+                    URL.revokeObjectURL(item.previewUrl);
+                    selectedImages.splice(index, 1);
+                    renderImagePreview();
+                });
+                imagePreview.appendChild(card);
+            });
+        }
+
+        async function addImageFiles(fileList) {
+            const files = Array.from(fileList || []);
+            for (const file of files) {
+                if (selectedImages.length >= MAX_IMAGES) {
+                    statusText.textContent = `画像は最大${MAX_IMAGES}枚までです。`;
+                    statusText.className = 'text-sm text-amber-700 text-center';
+                    break;
+                }
+                if (!file.type.startsWith('image/')) continue;
+                if (file.size > MAX_IMAGE_BYTES) {
+                    statusText.textContent = `${file.name} は2MBを超えているためスキップしました。`;
+                    statusText.className = 'text-sm text-amber-700 text-center';
+                    continue;
+                }
+                const previewUrl = URL.createObjectURL(file);
+                const dataBase64 = await readFileAsBase64(file);
+                selectedImages.push({ file, previewUrl, dataBase64 });
+            }
+            renderImagePreview();
+            imageInput.value = '';
+        }
+
+        addUrlBtn.addEventListener('click', () => addUrlField());
+        addUrlField();
+
+        imageInput.addEventListener('change', (e) => addImageFiles(e.target.files));
+
+        ['dragenter', 'dragover'].forEach((ev) => {
+            dropZone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+        });
+        ['dragleave', 'drop'].forEach((ev) => {
+            dropZone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (ev === 'drop') addImageFiles(e.dataTransfer.files);
+            });
+        });
+
+        async function postToGoogleSheets(payload) {
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL') {
+                return { ok: false, reason: 'missing_endpoint' };
+            }
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const json = await response.json().catch(() => ({}));
+                return { ok: response.ok && json.ok !== false, status: response.status, json };
+            } catch (error) {
+                return { ok: false, reason: 'network_error', error };
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusText.textContent = '';
+
+            const machineRequest = String(document.getElementById('machine-request').value || '').trim();
+            if (!machineRequest) {
+                statusText.textContent = '設置してほしいマシンをご記入ください。';
+                statusText.className = 'text-sm text-red-600 text-center';
+                return;
+            }
+
+            const referenceUrls = Array.from(form.querySelectorAll('input[name="referenceUrl"]'))
+                .map((el) => String(el.value || '').trim())
+                .filter(Boolean);
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '送信中...';
+
+            const payload = {
+                version: 'vol2',
+                submittedAt: new Date().toISOString(),
+                machineRequest,
+                referenceUrls,
+                note: String(document.getElementById('note').value || '').trim(),
+                images: selectedImages.map((item) => ({
+                    name: item.file.name,
+                    mimeType: item.file.type || 'image/jpeg',
+                    dataBase64: item.dataBase64
+                }))
+            };
+
+            const result = await postToGoogleSheets(payload);
+
+            if (result.ok) {
+                statusText.textContent = '送信ありがとうございました。ご協力に感謝します。';
+                statusText.className = 'text-sm text-green-700 text-center';
+                form.reset();
+                selectedImages.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+                selectedImages = [];
+                renderImagePreview();
+                urlList.innerHTML = '';
+                addUrlField();
+            } else if (result.reason === 'missing_endpoint') {
+                statusText.textContent = '送信先未設定のため、内容を端末に一時保存しました。';
+                statusText.className = 'text-sm text-amber-700 text-center';
+                localStorage.setItem('joyfit-survey-vol2-last', JSON.stringify(payload));
+            } else {
+                statusText.textContent = result.json?.message || '送信に失敗しました。時間をおいて再度お試しください。';
+                statusText.className = 'text-sm text-red-600 text-center';
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = '送信する';
+        });
+    </script>
+</body>
+</html>

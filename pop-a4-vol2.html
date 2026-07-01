@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOYFIT24 経堂 アンケート VOL.2 POP</title>
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    * { box-sizing: border-box; }
+    :root { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html, body {
+      margin: 0; padding: 0;
+      background: linear-gradient(160deg, #eceff3 0%, #e5e7eb 100%);
+      font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+    }
+    .toolbar { position: fixed; top: 10px; right: 10px; z-index: 10; }
+    .print-btn {
+      border: none; border-radius: 999px; padding: 10px 16px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      background: linear-gradient(145deg, #c22045, #981a36);
+      box-shadow: 0 8px 20px rgba(152, 26, 54, 0.25); cursor: pointer;
+    }
+    .sheet {
+      width: 210mm; height: 297mm; margin: 0 auto;
+      background: #fff; color: #111827;
+      padding: 14mm 14mm 12mm;
+      display: flex; flex-direction: column;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 5mm 14mm rgba(31, 41, 55, 0.16);
+    }
+    .store { text-align: center; color: #b21f3a; font-weight: 700; font-size: 6.4mm; margin: 0; }
+    .badge {
+      display: inline-block; margin-top: 4mm;
+      padding: 1.5mm 5mm; border-radius: 999px;
+      background: #fce7ec; color: #b21f3a;
+      font-size: 5mm; font-weight: 900; letter-spacing: 0.08em;
+    }
+    .title {
+      margin: 3mm 0 0; text-align: center;
+      font-weight: 900; font-size: 15mm; line-height: 1.25; color: #b21f3a;
+    }
+    .subtitle { margin: 3mm 0 0; text-align: center; font-weight: 700; font-size: 7mm; color: #1f2937; }
+    .body {
+      margin: 10mm 0 0; text-align: center; font-size: 5.8mm; line-height: 1.85;
+      color: #374151; border: 1px solid #f3d6de; border-radius: 4mm; padding: 5mm 4mm;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,247,249,0.8));
+    }
+    .qr-wrap { margin-top: 12mm; display: flex; justify-content: center; }
+    .qr-card {
+      border: 1px solid #f0d6dd; border-radius: 5mm; padding: 6.5mm;
+      background: #fff;
+      box-shadow: 0 3mm 10mm rgba(178, 31, 58, 0.15);
+    }
+    .qr { width: 72mm; height: 72mm; display: block; }
+    .cta {
+      margin: 7mm 0 0; text-align: center;
+      font-size: 7.2mm; font-weight: 900; color: #b21f3a; line-height: 1.5;
+    }
+    .url-note { margin-top: 3mm; text-align: center; font-size: 4.2mm; color: #6b7280; word-break: break-all; }
+    @media print {
+      html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+      .toolbar { display: none !important; }
+      .sheet { margin: 0 !important; border: 0 !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" class="print-btn" onclick="window.print()">印刷する</button>
+  </div>
+  <main class="sheet">
+    <p class="store">JOYFIT24 経堂</p>
+    <p style="text-align:center;margin:0"><span class="badge">VOL.2</span></p>
+    <h1 class="title">設置してほしい<br>マシンアンケート</h1>
+    <p class="subtitle">ご希望のマシンをお聞かせください</p>
+    <section class="body">
+      <div>導入してほしいマシンがあれば、</div>
+      <div>マシン名・参考URL・写真をお送りください。</div>
+    </section>
+    <div class="qr-wrap">
+      <div class="qr-card">
+        <img class="qr" id="qr-img" src="" alt="アンケート VOL.2 QRコード" />
+      </div>
+    </div>
+    <p class="cta">スマホでQRを読み取ってご回答ください</p>
+    <p class="url-note" id="survey-url"></p>
+  </main>
+  <script>
+    const SURVEY_URL = 'https://joyfit-kyodo-survey.vercel.app/vol2.html';
+    document.getElementById('survey-url').textContent = SURVEY_URL;
+    document.getElementById('qr-img').src =
+      'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(SURVEY_URL);
+  </script>
+</body>
+</html>
