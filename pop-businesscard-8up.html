@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JOYFIT24 経堂 名刺サイズPOP（8面付け）</title>
+  <title>JOYFIT24 経堂 お客様アンケート VOL.2｜名刺POP 8面付け</title>
   <style>
     @page { size: A4 portrait; margin: 0; }
     :root {
-      --joy: #b21f3a;
-      --ink: #1f2937;
+      --joy: #C21632;
+      --joy-dark: #9E1028;
+      --joy-pale: #F8DDE2;
+      --ink: #2a2a2a;
+      --muted: #555555;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
@@ -16,7 +19,7 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: #eef1f5;
+      background: #eceff3;
       font-family: "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
     }
     .toolbar {
@@ -24,8 +27,6 @@
       top: 10px;
       right: 10px;
       z-index: 20;
-      display: flex;
-      gap: 8px;
     }
     .btn {
       border: none;
@@ -34,123 +35,107 @@
       font-size: 13px;
       font-weight: 700;
       color: #fff;
-      background: linear-gradient(145deg, #c22045, #981a36);
-      box-shadow: 0 8px 18px rgba(152, 26, 54, 0.25);
+      background: var(--joy);
+      box-shadow: 0 6px 16px rgba(194, 22, 50, 0.38);
       cursor: pointer;
     }
+    /* A4: 2列 × 4行 = 8枚（名刺サイズ 91×55mm 想定） */
     .sheet {
       width: 210mm;
       height: 297mm;
       margin: 0 auto;
       background: #fff;
-      padding: 4mm;
+      padding: 3.5mm;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(4, minmax(0, 1fr));
-      gap: 2mm;
-      box-shadow: 0 5mm 14mm rgba(31, 41, 55, 0.16);
+      grid-template-columns: repeat(2, 91mm);
+      grid-template-rows: repeat(4, 55mm);
+      gap: 3mm 4mm;
+      justify-content: center;
+      align-content: center;
+      box-shadow: 0 5mm 14mm rgba(31, 41, 55, 0.12);
     }
     .card {
       position: relative;
-      border: 0.35mm solid #d1d5db;
-      border-radius: 2.8mm;
+      width: 91mm;
+      height: 55mm;
+      border: 0.35mm solid var(--joy-pale);
+      border-top: 1.8mm solid var(--joy);
+      border-left: 0.8mm solid var(--joy);
+      background: #fff;
+      padding: 3mm 3.2mm 2.8mm;
       overflow: hidden;
-      background:
-        radial-gradient(circle at right top, rgba(194, 32, 69, 0.18), transparent 35%),
-        radial-gradient(circle at left bottom, rgba(246, 186, 64, 0.16), transparent 38%),
-        #fff;
-      padding: 3.8mm 4mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
-    .cut {
-      position: absolute;
-      inset: 1mm;
-      border: 0.2mm dashed rgba(107, 114, 128, 0.45);
-      border-radius: 2mm;
-      pointer-events: none;
-    }
-    .top {
-      display: grid;
-      grid-template-columns: 1fr 25mm;
-      gap: 2.8mm;
-      align-items: start;
-    }
-    .logo {
-      width: 100%;
-      height: 9.2mm;
-      object-fit: contain;
-      object-position: left center;
-      filter: drop-shadow(0 0.5mm 1mm rgba(178, 31, 58, 0.15));
-    }
-    .qr-shell {
-      position: relative;
-      width: 25mm;
-      height: 25mm;
-      border-radius: 3.2mm;
-      padding: 1.05mm;
-      background: linear-gradient(145deg, rgba(194, 32, 69, 0.9), rgba(246, 186, 64, 0.7));
-      box-shadow:
-        0 1.5mm 3.2mm rgba(178, 31, 58, 0.2),
-        0 0.35mm 0.9mm rgba(255, 255, 255, 0.45) inset;
-    }
-    .qr-shell::after {
+    .card::after {
       content: "";
       position: absolute;
-      inset: -0.65mm;
-      border: 0.28mm solid rgba(194, 32, 69, 0.3);
-      border-radius: 3.6mm;
+      inset: 1.2mm;
+      border: 0.2mm dashed rgba(0, 0, 0, 0.12);
       pointer-events: none;
     }
-    .qr {
-      width: 25mm;
-      height: 25mm;
-      object-fit: contain;
-      background: #fff;
-      border: 0.3mm solid rgba(255, 255, 255, 0.95);
-      border-radius: 2.6mm;
-      padding: 1.15mm;
-      display: block;
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2mm;
     }
-    .title {
-      margin: 1.7mm 0 0;
-      font-size: 5.7mm;
-      line-height: 1.2;
+    .head-text {
+      flex: 1;
+      min-width: 0;
+      padding-right: 1mm;
+    }
+    .store {
+      margin: 0;
+      font-size: 3.2mm;
       font-weight: 900;
       color: var(--joy);
+      letter-spacing: 0.06em;
     }
-    .sub {
-      margin: 1.1mm 0 0;
-      font-size: 3.5mm;
-      line-height: 1.45;
-      color: var(--ink);
-      font-weight: 700;
-    }
-    .desc {
-      margin: 2.3mm 0 0;
-      padding: 2.1mm 2.2mm;
-      border-radius: 1.8mm;
-      border: 0.25mm solid #f2d9df;
-      background: rgba(255, 255, 255, 0.86);
-      font-size: 3mm;
-      color: #374151;
-      line-height: 1.45;
-      font-weight: 700;
-      min-height: 18mm;
-    }
-    .desc b {
-      color: #9f1738;
+    .vol {
+      margin: 0.8mm 0 0;
+      font-size: 3.4mm;
       font-weight: 900;
+      color: var(--joy);
+      line-height: 1.2;
+    }
+    .qr {
+      width: 22mm;
+      height: 22mm;
+      flex-shrink: 0;
+      object-fit: contain;
+      display: block;
+      border: 0.45mm solid var(--joy);
+      border-radius: 1.2mm;
+      padding: 0.8mm;
+      background: #fff;
+    }
+    .catch {
+      margin: 2.2mm 0 0;
+      font-size: 4.1mm;
+      font-weight: 900;
+      color: var(--joy);
+      line-height: 1.28;
+    }
+    .body {
+      margin: 1.8mm 0 0;
+      font-size: 2.65mm;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 500;
     }
     .cta {
-      margin-top: auto;
-      padding-top: 1.8mm;
-      font-size: 4.1mm;
-      line-height: 1.35;
+      position: absolute;
+      left: 3.2mm;
+      right: 3.2mm;
+      bottom: 2.6mm;
+      margin: 0;
+      padding-top: 1.2mm;
+      border-top: 0.35mm solid var(--joy-pale);
+      background: linear-gradient(180deg, #fff8f9 0%, #fff 100%);
+      font-size: 3mm;
       font-weight: 900;
       color: var(--joy);
-      letter-spacing: 0.01em;
+      text-align: center;
+      letter-spacing: 0.02em;
     }
     @media print {
       html, body { background: #fff !important; }
@@ -158,6 +143,7 @@
       .sheet {
         margin: 0 !important;
         box-shadow: none !important;
+        padding: 0;
       }
       .card {
         break-inside: avoid;
@@ -175,38 +161,32 @@
 
   <template id="card-template">
     <section class="card">
-      <div class="cut"></div>
-      <div class="top">
-        <div>
-          <img
-            class="logo"
-            src="C:/Users/81703/.cursor/projects/c-Users-81703-OneDrive/assets/c__Users_81703_AppData_Roaming_Cursor_User_workspaceStorage_a9b1b9b607b3b0b196ac288fa9829264_images_JOYLOGO__-____-c5cdf28c-b39d-42e2-bc09-c90f704cfa9b.png"
-            alt="JOYFIT24 ロゴ"
-          />
-          <h2 class="title">会員様アンケート</h2>
-          <p class="sub">QRを読み取ってご回答ください</p>
+      <div class="head">
+        <div class="head-text">
+          <p class="store">JOYFIT24 経堂</p>
+          <p class="vol">お客様アンケートVOL.2</p>
         </div>
-        <div class="qr-shell">
-          <img
-            class="qr"
-            src="C:/Users/81703/.cursor/projects/c-Users-81703-OneDrive/assets/c__Users_81703_AppData_Roaming_Cursor_User_workspaceStorage_a9b1b9b607b3b0b196ac288fa9829264_images_QR_962298-504d6444-e707-46dd-a293-e28f03a14f4b.png"
-            alt="アンケートQR"
-          />
-        </div>
+        <img class="qr" src="" alt="アンケートQR" width="220" height="220" />
       </div>
-      <div class="desc">
-        <div><b>1〜2分で回答</b>いただけます。</div>
-        <div>いただいたお声を、サービス向上の参考にいたします。</div>
-      </div>
-      <p class="cta">ご協力をお願いいたします</p>
+      <h2 class="catch">JOYFIT24経堂に<br>設置してほしいマシン！</h2>
+      <p class="body">
+        ご希望のマシン名や、参考になる商品ページ・画像があれば是非お知らせください。皆さまのお声をもとに、今後のサービスの参考にさせていただきます。
+      </p>
+      <p class="cta">右上QRを読み取ってご回答ください</p>
     </section>
   </template>
 
   <script>
-    const sheet = document.getElementById("sheet");
-    const tpl = document.getElementById("card-template");
+    const SURVEY_URL = 'https://joyfit-kyodo-survey.vercel.app/vol2.html';
+    const QR_SRC =
+      'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(SURVEY_URL);
+
+    const sheet = document.getElementById('sheet');
+    const tpl = document.getElementById('card-template');
     for (let i = 0; i < 8; i += 1) {
-      sheet.appendChild(tpl.content.cloneNode(true));
+      const card = tpl.content.cloneNode(true);
+      card.querySelector('.qr').src = QR_SRC;
+      sheet.appendChild(card);
     }
   </script>
 </body>
