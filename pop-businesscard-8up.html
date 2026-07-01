@@ -8,10 +8,15 @@
     @page { size: A4 portrait; margin: 0; }
     :root {
       --joy: #C21632;
-      --joy-dark: #9E1028;
       --joy-pale: #F8DDE2;
-      --ink: #2a2a2a;
       --muted: #555555;
+      --card-w: 91mm;
+      --card-h: 55mm;
+      --gap-x: 2mm;
+      --gap-y: 2mm;
+      /* A4中央配置: 横(210-2*91-2)/2=13, 縦(297-4*55-3*2)/2=35.5 */
+      --sheet-pad-x: 13mm;
+      --sheet-pad-y: 35.5mm;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
@@ -39,103 +44,96 @@
       box-shadow: 0 6px 16px rgba(194, 22, 50, 0.38);
       cursor: pointer;
     }
-    /* A4: 2列 × 4行 = 8枚（名刺サイズ 91×55mm 想定） */
     .sheet {
       width: 210mm;
       height: 297mm;
       margin: 0 auto;
       background: #fff;
-      padding: 3.5mm;
+      padding: var(--sheet-pad-y) var(--sheet-pad-x);
       display: grid;
-      grid-template-columns: repeat(2, 91mm);
-      grid-template-rows: repeat(4, 55mm);
-      gap: 3mm 4mm;
-      justify-content: center;
-      align-content: center;
+      grid-template-columns: repeat(2, var(--card-w));
+      grid-template-rows: repeat(4, var(--card-h));
+      column-gap: var(--gap-x);
+      row-gap: var(--gap-y);
       box-shadow: 0 5mm 14mm rgba(31, 41, 55, 0.12);
     }
     .card {
-      position: relative;
-      width: 91mm;
-      height: 55mm;
-      border: 0.35mm solid var(--joy-pale);
-      border-top: 1.8mm solid var(--joy);
-      border-left: 0.8mm solid var(--joy);
+      width: var(--card-w);
+      height: var(--card-h);
+      display: flex;
+      flex-direction: column;
+      border: 0.3mm solid var(--joy-pale);
+      border-top: 1.2mm solid var(--joy);
+      border-left: 0.6mm solid var(--joy);
       background: #fff;
-      padding: 3mm 3.2mm 2.8mm;
+      padding: 1.8mm 2.2mm 1.6mm;
       overflow: hidden;
-    }
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 1.2mm;
-      border: 0.2mm dashed rgba(0, 0, 0, 0.12);
-      pointer-events: none;
     }
     .head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 2mm;
+      gap: 1.5mm;
+      flex-shrink: 0;
     }
     .head-text {
       flex: 1;
       min-width: 0;
-      padding-right: 1mm;
     }
     .store {
       margin: 0;
-      font-size: 3.2mm;
+      font-size: 2.8mm;
       font-weight: 900;
       color: var(--joy);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
     }
     .vol {
-      margin: 0.8mm 0 0;
-      font-size: 3.4mm;
+      margin: 0.5mm 0 0;
+      font-size: 2.9mm;
       font-weight: 900;
       color: var(--joy);
-      line-height: 1.2;
+      line-height: 1.15;
     }
     .qr {
-      width: 22mm;
-      height: 22mm;
+      width: 17mm;
+      height: 17mm;
       flex-shrink: 0;
       object-fit: contain;
       display: block;
-      border: 0.45mm solid var(--joy);
-      border-radius: 1.2mm;
-      padding: 0.8mm;
+      border: 0.35mm solid var(--joy);
+      border-radius: 0.8mm;
+      padding: 0.5mm;
       background: #fff;
     }
     .catch {
-      margin: 2.2mm 0 0;
-      font-size: 4.1mm;
+      margin: 1mm 0 0;
+      font-size: 3.5mm;
       font-weight: 900;
       color: var(--joy);
-      line-height: 1.28;
+      line-height: 1.18;
+      flex-shrink: 0;
     }
     .body {
-      margin: 1.8mm 0 0;
-      font-size: 2.65mm;
-      line-height: 1.5;
+      margin: 0.8mm 0 0;
+      font-size: 2.25mm;
+      line-height: 1.38;
       color: var(--muted);
       font-weight: 500;
+      flex: 1;
+      min-height: 0;
     }
     .cta {
-      position: absolute;
-      left: 3.2mm;
-      right: 3.2mm;
-      bottom: 2.6mm;
-      margin: 0;
-      padding-top: 1.2mm;
-      border-top: 0.35mm solid var(--joy-pale);
-      background: linear-gradient(180deg, #fff8f9 0%, #fff 100%);
-      font-size: 3mm;
+      margin: 0.8mm 0 0;
+      padding-top: 0.7mm;
+      border-top: 0.25mm solid var(--joy-pale);
+      font-size: 2.5mm;
       font-weight: 900;
       color: var(--joy);
       text-align: center;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      flex-shrink: 0;
     }
     @media print {
       html, body { background: #fff !important; }
@@ -143,7 +141,9 @@
       .sheet {
         margin: 0 !important;
         box-shadow: none !important;
-        padding: 0;
+        width: 210mm !important;
+        height: 297mm !important;
+        padding: var(--sheet-pad-y) var(--sheet-pad-x) !important;
       }
       .card {
         break-inside: avoid;
@@ -166,7 +166,7 @@
           <p class="store">JOYFIT24 経堂</p>
           <p class="vol">お客様アンケートVOL.2</p>
         </div>
-        <img class="qr" src="" alt="アンケートQR" width="220" height="220" />
+        <img class="qr" src="" alt="アンケートQR" width="170" height="170" />
       </div>
       <h2 class="catch">JOYFIT24経堂に<br>設置してほしいマシン！</h2>
       <p class="body">
@@ -179,7 +179,7 @@
   <script>
     const SURVEY_URL = 'https://joyfit-kyodo-survey.vercel.app/vol2.html';
     const QR_SRC =
-      'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(SURVEY_URL);
+      'https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=' + encodeURIComponent(SURVEY_URL);
 
     const sheet = document.getElementById('sheet');
     const tpl = document.getElementById('card-template');
