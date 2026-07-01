@@ -32,6 +32,8 @@
       top: 10px;
       right: 10px;
       z-index: 20;
+      display: flex;
+      gap: 8px;
     }
     .btn {
       border: none;
@@ -43,6 +45,19 @@
       background: var(--joy);
       box-shadow: 0 6px 16px rgba(194, 22, 50, 0.38);
       cursor: pointer;
+    }
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+    .btn-outline {
+      background: #fff;
+      color: var(--joy);
+      border: 2px solid var(--joy);
+      box-shadow: none;
+    }
+    body.exporting .sheet {
+      box-shadow: none;
     }
     .sheet {
       width: 210mm;
@@ -155,6 +170,7 @@
 </head>
 <body>
   <div class="toolbar">
+    <button class="btn btn-outline" id="save-png-btn" type="button">PNGで保存</button>
     <button class="btn" type="button" onclick="window.print()">印刷する（A4・8面）</button>
   </div>
 
@@ -177,18 +193,100 @@
     </section>
   </template>
 
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     const SURVEY_URL = 'https://joyfit-kyodo-survey.vercel.app/vol2.html';
     const QR_SRC =
-      'https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=' + encodeURIComponent(SURVEY_URL);
+      'https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=' + encodeURIComponent(SURVEY_URL);
+    const PNG_WIDTH = 2480;
+    const PNG_HEIGHT = 3508;
 
     const sheet = document.getElementById('sheet');
     const tpl = document.getElementById('card-template');
-    for (let i = 0; i < 8; i += 1) {
-      const card = tpl.content.cloneNode(true);
-      card.querySelector('.qr').src = QR_SRC;
-      sheet.appendChild(card);
+    const saveBtn = document.getElementById('save-png-btn');
+
+    async function fetchQrDataUrl() {
+      const res = await fetch(QR_SRC);
+      if (!res.ok) throw new Error('QR画像の取得に失敗しました');
+      const blob = await res.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     }
+
+    async function initCards() {
+      const qrDataUrl = await fetchQrDataUrl();
+      for (let i = 0; i < 8; i += 1) {
+        const card = tpl.content.cloneNode(true);
+        card.querySelector('.qr').src = qrDataUrl;
+        sheet.appendChild(card);
+      }
+    }
+
+    async function waitForImages(root) {
+      const images = [...root.querySelectorAll('img')];
+      await Promise.all(images.map((img) => {
+        if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        });
+      }));
+    }
+
+    async function savePng() {
+      if (typeof html2canvas !== 'function') {
+        alert('画像生成ライブラリの読み込みに失敗しました。ページを再読み込みしてください。');
+        return;
+      }
+
+      saveBtn.disabled = true;
+      const prevText = saveBtn.textContent;
+      saveBtn.textContent = 'PNG作成中…';
+      document.body.classList.add('exporting');
+
+      try {
+        await waitForImages(sheet);
+        const scale = PNG_WIDTH / sheet.offsetWidth;
+        const canvas = await html2canvas(sheet, {
+          scale,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false,
+          width: sheet.offsetWidth,
+          height: sheet.offsetHeight,
+        });
+
+        const output = document.createElement('canvas');
+        output.width = PNG_WIDTH;
+        output.height = PNG_HEIGHT;
+        const ctx = output.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, PNG_WIDTH, PNG_HEIGHT);
+        ctx.drawImage(canvas, 0, 0, PNG_WIDTH, PNG_HEIGHT);
+
+        const link = document.createElement('a');
+        link.download = 'joyfit-kyodo-survey-pop-vol2-8up.png';
+        link.href = output.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error(err);
+        alert('PNGの保存に失敗しました。時間をおいて再度お試しください。');
+      } finally {
+        document.body.classList.remove('exporting');
+        saveBtn.disabled = false;
+        saveBtn.textContent = prevText;
+      }
+    }
+
+    saveBtn.addEventListener('click', savePng);
+    initCards().catch((err) => {
+      console.error(err);
+      alert('QR画像の読み込みに失敗しました。ネットワーク接続を確認してください。');
+    });
   </script>
 </body>
 </html>
